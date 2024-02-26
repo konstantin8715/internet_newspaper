@@ -21,10 +21,5 @@ export const useUserStore = defineStore('userStore', {
             localStorage.setItem('userSurname', surname);
             localStorage.setItem('userRoles', JSON.stringify(roles));
         },
-
-        saveTokensForUser(accessToken, refreshToken) {
-            localStorage.setItem('accessToken', accessToken);
-            localStorage.setItem('refreshToken', refreshToken);
-        },
     }
 })

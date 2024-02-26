@@ -23,7 +23,7 @@ export const authenticationApi = {
     },
 
     refreshToken() {
-
+        
     },
 
     signOut() {

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- TODO: Сделать валидацию -->
     <input
       style="width: 500px; height: 100px; font-size: 32px"
       v-model="email"
@@ -17,6 +18,7 @@
 <script>
 import { authenticationApi } from "../api/AuthenticationApi";
 import { useUserStore } from "../stores/UserStore";
+import { useTokenStore } from "../stores/TokenStore";
 
 export default {
   components: {},
@@ -25,6 +27,7 @@ export default {
       email: "",
       password: "",
       userStore: useUserStore(),
+      tokenStore: useTokenStore(),
     };
   },
 
@@ -35,7 +38,7 @@ export default {
         .then((r) => {
           console.log(r.data);
           this.userStore.saveUser(r.data.name, r.data.surname, r.data.roles);
-          this.userStore.saveTokensForUser(r.data.accessToken, r.data.refreshToken);
+          this.tokenStore.saveTokens(r.data.accessToken, r.data.refreshToken);
           this.$router.push("/");
         })
         .catch((err) => console.log(err));

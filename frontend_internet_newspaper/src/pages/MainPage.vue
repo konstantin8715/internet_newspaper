@@ -12,6 +12,7 @@
       <h1>{{ n.newsTitle }}</h1>
       <div>{{ n.newsText }}</div>
       <img :src="n.picture.url" />
+      <button @click="">count of likes</button>
     </div>
   </div>
 </template>
