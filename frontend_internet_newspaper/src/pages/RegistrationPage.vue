@@ -47,16 +47,12 @@ export default {
     signup() {
       authenticationApi
         .signUp(this.name, this.surname, this.email, this.password)
+        .then(() => this.$router.push('login'))
         .catch((err) => {
-          if (
-            err.response.data.email ===
-            "User with email kostya.ignatev.14@mail.ru already exists"
-          )
-            this.showErrorMessage = true;
-          else {
-            this.showErrorMessage = false;
-            alert("Ошибка при отправке запроса на сервер. Попробуйте еще раз.");
-          }
+          console.log(err);
+          alert(
+            "Ошибка при отправке запроса на сервер или пользователь с данной почтой уже сущестует. Попробуйте еще раз."
+          );
         });
     },
   },

@@ -15,5 +15,16 @@ export const useUserStore = defineStore('userStore', {
             this.surname = localStorage.getItem('userSurname');
             this.roles = JSON.parse(localStorage.getItem('userRoles'));
         },
+
+        saveUser(name, surname, roles) {
+            localStorage.setItem('userName', name);
+            localStorage.setItem('userSurname', surname);
+            localStorage.setItem('userRoles', JSON.stringify(roles));
+        },
+
+        saveTokensForUser(accessToken, refreshToken) {
+            localStorage.setItem('accessToken', accessToken);
+            localStorage.setItem('refreshToken', refreshToken);
+        },
     }
 })

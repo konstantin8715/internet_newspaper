@@ -12,15 +12,14 @@ export const authenticationApi = {
         });
     },
 
-    signIn(email, password) {
-        axios({
+    async signIn(email, password) {
+        return await axios({
             method: 'post',
             url: 'http://localhost:8085/auth/sign-in',
             data: {
                 email, password
             },
-        }).then(response => console.log(response))
-          .catch(error => console.log(error.response.data));
+        });
     },
 
     refreshToken() {

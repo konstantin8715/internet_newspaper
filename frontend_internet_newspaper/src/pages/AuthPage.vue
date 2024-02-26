@@ -15,7 +15,8 @@
 </template>
 
 <script>
-import {authenticationApi} from "../api/AuthenticationApi";
+import { authenticationApi } from "../api/AuthenticationApi";
+import { useUserStore } from "../stores/UserStore";
 
 export default {
   components: {},
@@ -23,15 +24,21 @@ export default {
     return {
       email: "",
       password: "",
-      authenticationApi,
+      userStore: useUserStore(),
     };
   },
 
   methods: {
     signin() {
-      console.log(this.email);
-      console.log(this.password);
-      authenticationApi.signIn(this.email, this.password);
+      authenticationApi
+        .signIn(this.email, this.password)
+        .then((r) => {
+          console.log(r.data);
+          this.userStore.saveUser(r.data.name, r.data.surname, r.data.roles);
+          this.userStore.saveTokensForUser(r.data.accessToken, r.data.refreshToken);
+          this.$router.push("/");
+        })
+        .catch((err) => console.log(err));
     },
   },
 };
