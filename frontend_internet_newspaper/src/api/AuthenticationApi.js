@@ -5,7 +5,7 @@ export const authenticationApi = {
     async signUp(name, surname, email, password) {
         return await axios({
             method: 'post',
-            url: 'http://localhost:8085/auth/sign-up',
+            url: 'http://localhost:8080/auth/sign-up',
             data: {
                 name, surname, email, password
             }
@@ -15,7 +15,7 @@ export const authenticationApi = {
     async signIn(email, password) {
         return await axios({
             method: 'post',
-            url: 'http://localhost:8085/auth/sign-in',
+            url: 'http://localhost:8080/auth/sign-in',
             data: {
                 email, password
             },

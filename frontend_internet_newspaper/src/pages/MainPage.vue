@@ -7,18 +7,23 @@
   <div class="container">
     <button @click="$router.push('login')">Log in</button>
     <button @click="$router.push('signup')">Sign up</button>
-    <div class="news" v-for="n in news" :key="n.id">
-      <div>{{ n.id }}</div>
-      <h1>{{ n.newsTitle }}</h1>
+    <div
+      class="news"
+      v-for="n in news"
+      :key="n.id"
+      style="border: solid red; margin-top: 20px"
+    >
+      <h3>{{ n.newsTitle }}</h3>
       <div>{{ n.newsText }}</div>
-      <img :src="n.picture.url" />
-      <button @click="">count of likes</button>
+      <img width="200px" length="100px" :src="n.picture.url" /><br />
+      <button @click="likeNews(n.id)">Количество лайков: {{ n.likes.length }}</button>
     </div>
   </div>
 </template>
 
 <script>
 import { newsApi } from "../api/NewsApi";
+import { likesApi } from "../api/LikesApi";
 import { useUserStore } from "../stores/UserStore";
 
 export default {
@@ -30,10 +35,19 @@ export default {
     };
   },
 
-  methods: {},
+  methods: {
+    likeNews(id) {
+      likesApi.likeNews(id).then((r) => {
+        console.log(r);
+      });
+    },
+  },
 
   created() {
-    newsApi.getFreshNews().then((response) => (this.news = response.data));
+    newsApi.getFreshNews().then((r) => {
+      console.log(r);
+      this.news = r.data;
+    });
     this.userStore.loadUser();
   },
 };
