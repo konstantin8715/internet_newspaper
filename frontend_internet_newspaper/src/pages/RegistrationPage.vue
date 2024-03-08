@@ -29,7 +29,6 @@
 </template>
 
 <script>
-import { authenticationApi } from "../api/AuthenticationApi";
 
 export default {
   components: {},
@@ -45,15 +44,15 @@ export default {
 
   methods: {
     signup() {
-      authenticationApi
-        .signUp(this.name, this.surname, this.email, this.password)
-        .then(() => this.$router.push('login'))
-        .catch((err) => {
-          console.log(err);
-          alert(
-            "Ошибка при отправке запроса на сервер или пользователь с данной почтой уже сущестует. Попробуйте еще раз."
-          );
-        });
+      // authenticationApi
+      //   .signUp(this.name, this.surname, this.email, this.password)
+      //   .then(() => this.$router.push('login'))
+      //   .catch((err) => {
+      //     console.log(err);
+      //     alert(
+      //       "Ошибка при отправке запроса на сервер или пользователь с данной почтой уже сущестует. Попробуйте еще раз."
+      //     );
+      //   });
     },
   },
 };

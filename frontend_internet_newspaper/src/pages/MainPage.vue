@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="this.useUserStore.name && this.useUserStore.surname && this.useUserStore.roles">
     {{ this.userStore.name }}
     {{ this.userStore.surname }}
     {{ this.userStore.roles }}
@@ -22,8 +22,8 @@
 </template>
 
 <script>
-import { newsApi } from "../api/NewsApi";
-import { likesApi } from "../api/LikesApi";
+import { newsService } from "../services/NewsService";
+import { likesService } from "../services/LikesService";
 import { useUserStore } from "../stores/UserStore";
 
 export default {
@@ -36,21 +36,28 @@ export default {
   },
 
   methods: {
-    likeNews(id) {
-      likesApi.likeNews(id).then((r) => {
-        console.log(r);
-      });
+
+    async likeNews(news) {
+      try {
+        likesService.saveLike(news.id);
+        news.likes.push({});
+      } catch (error) {
+        alert('Пользователь неавторизован');
+        this.userStore.$reset();
+      }
     },
+
   },
 
-  created() {
-    newsApi.getFreshNews().then((r) => {
-      console.log(r);
-      this.news = r.data;
-    });
+  async created() {
     this.userStore.loadUser();
+    try {
+      this.news = await newsService.getFreshNews();
+    } catch (error) {
+      alert('Ошибка при загрузке новостей');
+    }
   },
 };
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss"></style>../services/LikesService
