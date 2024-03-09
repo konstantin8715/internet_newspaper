@@ -22,12 +22,12 @@ export const authenticationApi = {
         });
     },
 
-    refreshToken(refreshToken) {
+    refreshToken() {
         return axios({
             method: 'post',
             url: 'http://localhost:8080/auth/refresh-token',
             data: {
-                refreshToken,
+                refreshToken: localStorage.getItem('refreshToken'),
             },
         });
     },

@@ -1,5 +1,7 @@
 <template>
-  <div v-if="this.useUserStore.name && this.useUserStore.surname && this.useUserStore.roles">
+  <div
+    v-if="this.userStore.name && this.userStore.surname && this.userStore.roles"
+  >
     {{ this.userStore.name }}
     {{ this.userStore.surname }}
     {{ this.userStore.roles }}
@@ -16,7 +18,9 @@
       <h3>{{ n.newsTitle }}</h3>
       <div>{{ n.newsText }}</div>
       <img width="200px" length="100px" :src="n.picture.url" /><br />
-      <button @click="likeNews(n.id)">Количество лайков: {{ n.likes.length }}</button>
+      <button @click="likeNews(n)">
+        Количество лайков: {{ n.likes.length }}
+      </button>
     </div>
   </div>
 </template>
@@ -24,6 +28,7 @@
 <script>
 import { newsService } from "../services/NewsService";
 import { likesService } from "../services/LikesService";
+import { userService } from "../services/UserService";
 import { useUserStore } from "../stores/UserStore";
 
 export default {
@@ -36,28 +41,26 @@ export default {
   },
 
   methods: {
-
     async likeNews(news) {
       try {
-        likesService.saveLike(news.id);
-        news.likes.push({});
+        await likesService.saveLike(news, this.userStore);
       } catch (error) {
-        alert('Пользователь неавторизован');
-        this.userStore.$reset();
+        this.$router.push("/login");
+        alert("Пользователь неавторизован, либо срок действия токенов истек");
       }
     },
-
   },
 
   async created() {
-    this.userStore.loadUser();
+    this.userStore.loadUserFromLocalStorage();
     try {
       this.news = await newsService.getFreshNews();
     } catch (error) {
-      alert('Ошибка при загрузке новостей');
+      alert("Ошибка при загрузке новостей");
     }
   },
 };
 </script>
 
-<style scoped lang="scss"></style>../services/LikesService
+<style scoped lang="scss"></style>
+../services/LikesService
