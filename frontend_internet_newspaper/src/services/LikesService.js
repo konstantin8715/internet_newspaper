@@ -1,42 +1,34 @@
-import { likesApi } from '../api/LikesApi';
-import { userService } from '../services/UserService';
-import { newsService } from '../services/NewsService';
+import { likesApi } from "../api/LikesApi";
+import { userService } from "../services/UserService";
+import { newsService } from "../services/NewsService";
 
 export const likesService = {
+  async saveLike(news, user) {
+    try {
+      const like = news.likes.find((like) => like.user.id == user.id);
+      if (like) {
+        return likesService.deleteLike(news);
+      }
 
-    async saveLike(news, user) {
-        try {
-            if (news.likes.find(like => like.user.id === user.id)) {
-                await this.deleteLike(news.id);
-                return;
-            }
-            await likesApi.saveLike(news.id);
-            news.likes.push({});
-        } catch (error) {
-            try {
-                console.log('start refresh');
-                await userService.refreshToken();
-                console.log('end refresh');
-                this.saveLike(news);
-            } catch (error) {
-                console.log('start delete user');
-                user.deleteUserFromLocalStorage();
-                user.$reset();
-                console.log('end delete user');
-                throw error;
-            }
-        }
-    },
+      return likesApi.saveLike(news.id);
+    } catch (error) {
+      try {
+        await userService.refreshToken();
+        await this.saveLike(news, user);
+      } catch (error) {
+        console.log('unautorized');
+        user.deleteUserFromLocalStorage();
+        user.$reset();
+        throw error;
+      }
+    }
+  },
 
-    async deleteLike(newsId) {
-        try {
-            console.log('start delete like');
-            await likesApi.deleteLike(newsId);
-            news.likes.pop();
-            console.log('finish delete like');
-        } catch (error) {
-            throw error;
-        }
-    },
-
-}
+  async deleteLike(news) {
+    try {
+      await likesApi.deleteLike(news.id);
+    } catch (error) {
+      throw error;
+    }
+  },
+};

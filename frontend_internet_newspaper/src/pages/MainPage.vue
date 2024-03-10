@@ -17,7 +17,7 @@
     >
       <h3>{{ n.newsTitle }}</h3>
       <div>{{ n.newsText }}</div>
-      <img width="200px" length="100px" :src="n.picture.url" /><br />
+      <img width="500px" length="250px" :src="n.picture.url" /><br />
       <button @click="likeNews(n)">
         Количество лайков: {{ n.likes.length }}
       </button>
@@ -44,20 +44,25 @@ export default {
     async likeNews(news) {
       try {
         await likesService.saveLike(news, this.userStore);
+        this.getFreshNews();
       } catch (error) {
-        this.$router.push("/login");
-        alert("Пользователь неавторизован, либо срок действия токенов истек");
+        // this.$router.push("/login");
+        alert("Пользователь не авторизован, либо срок действия токенов истек");
+      }
+    },
+    
+    async getFreshNews() {
+      try {
+        this.news = await newsService.getFreshNews();
+      } catch (error) {
+        alert("Ошибка при загрузке новостей");
       }
     },
   },
 
-  async created() {
+  created() {
     this.userStore.loadUserFromLocalStorage();
-    try {
-      this.news = await newsService.getFreshNews();
-    } catch (error) {
-      alert("Ошибка при загрузке новостей");
-    }
+    this.getFreshNews();
   },
 };
 </script>
