@@ -1,12 +1,17 @@
 <template>
-  <div>
+  <!-- TODO: Сделать то, что в v-if getterом в UserStore -->
+  <div
+    v-if="this.userStore.name && this.userStore.surname && this.userStore.roles"
+  >
     {{ this.userStore.name }}
     {{ this.userStore.surname }}
-    {{ this.userStore.roles }}
+    <button @click="signOut">Sign out</button>
   </div>
-  <div class="container">
+  <div v-else>
     <button @click="$router.push('login')">Log in</button>
     <button @click="$router.push('signup')">Sign up</button>
+  </div>
+  <div class="container">
     <div
       class="news"
       v-for="n in news"
@@ -15,15 +20,18 @@
     >
       <h3>{{ n.newsTitle }}</h3>
       <div>{{ n.newsText }}</div>
-      <img width="200px" length="100px" :src="n.picture.url" /><br />
-      <button @click="likeNews(n.id)">Количество лайков: {{ n.likes.length }}</button>
+      <img width="500px" length="250px" :src="n.picture.url" /><br />
+      <button @click="likeNews(n)">
+        Количество лайков: {{ n.likes.length }}
+      </button>
     </div>
   </div>
 </template>
 
 <script>
-import { newsApi } from "../api/NewsApi";
-import { likesApi } from "../api/LikesApi";
+import { newsService } from "../services/NewsService";
+import { likesService } from "../services/LikesService";
+import { userService } from "../services/UserService";
 import { useUserStore } from "../stores/UserStore";
 
 export default {
@@ -36,21 +44,46 @@ export default {
   },
 
   methods: {
-    likeNews(id) {
-      likesApi.likeNews(id).then((r) => {
-        console.log(r);
-      });
+    async likeNews(news) {
+      try {
+        await likesService.saveLike(news, this.userStore);
+        this.getFreshNews();
+      } catch (error) {
+        alert("Пользователь не авторизован, либо срок действия токенов истек");
+      }
     },
+    
+    async getFreshNews() {
+      try {
+        this.news = await newsService.getFreshNews();
+      } catch (error) {
+        alert("Ошибка при загрузке новостей");
+      }
+    },
+
+    async signOut() {
+      try {
+        await userService.signOut();
+      } catch (error) {
+        alert("Не удалось выйти");
+      }
+    }
   },
 
-  created() {
-    newsApi.getFreshNews().then((r) => {
-      console.log(r);
-      this.news = r.data;
-    });
-    this.userStore.loadUser();
+  async created() {
+    try {
+      await userService.refreshToken(this.userStore);
+      this.userStore.loadUserFromLocalStorage();
+    }
+    catch {
+      alert("Пользователь не авторизован, либо срок действия токенов истек");
+    }
+    finally {
+      this.getFreshNews();
+    }
   },
 };
 </script>
 
 <style scoped lang="scss"></style>
+../services/LikesService

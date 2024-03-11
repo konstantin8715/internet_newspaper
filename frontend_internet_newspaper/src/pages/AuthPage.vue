@@ -11,38 +11,35 @@
       v-model="password"
       type="text"
     />
-    <button style="margin-top: 15px" @click="signin">signin</button>
+    <button style="margin-top: 15px" @click="signIn">signin</button>
   </div>
 </template>
 
 <script>
-import { authenticationApi } from "../api/AuthenticationApi";
 import { useUserStore } from "../stores/UserStore";
-import { useTokenStore } from "../stores/TokenStore";
+import { userService } from '../services/UserService';
 
 export default {
   components: {},
   data() {
     return {
-      email: "",
-      password: "",
+      email: "kostya.ignatev.14@mail.ru",
+      password: "Kostyaik22",
       userStore: useUserStore(),
-      tokenStore: useTokenStore(),
     };
   },
 
   methods: {
-    signin() {
-      authenticationApi
-        .signIn(this.email, this.password)
-        .then((r) => {
-          console.log(r.data);
-          this.userStore.saveUser(r.data.name, r.data.surname, r.data.roles);
-          this.tokenStore.saveTokens(r.data.accessToken, r.data.refreshToken);
-          this.$router.push("/");
-        })
-        .catch((err) => console.log(err));
+
+    async signIn() {
+      try {
+        await userService.signIn(this.email, this.password);
+        this.$router.push("/");
+      } catch (error) {
+        alert('Неправильное имя пользовтеля или пароль');
+      }
     },
+
   },
 };
 </script>
