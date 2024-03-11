@@ -1,14 +1,17 @@
 <template>
+  <!-- TODO: Сделать то, что в v-if getterом в UserStore -->
   <div
     v-if="this.userStore.name && this.userStore.surname && this.userStore.roles"
   >
     {{ this.userStore.name }}
     {{ this.userStore.surname }}
-    {{ this.userStore.roles }}
+    <button @click="signOut">Sign out</button>
   </div>
-  <div class="container">
+  <div v-else>
     <button @click="$router.push('login')">Log in</button>
     <button @click="$router.push('signup')">Sign up</button>
+  </div>
+  <div class="container">
     <div
       class="news"
       v-for="n in news"
@@ -46,7 +49,6 @@ export default {
         await likesService.saveLike(news, this.userStore);
         this.getFreshNews();
       } catch (error) {
-        // this.$router.push("/login");
         alert("Пользователь не авторизован, либо срок действия токенов истек");
       }
     },
@@ -58,11 +60,27 @@ export default {
         alert("Ошибка при загрузке новостей");
       }
     },
+
+    async signOut() {
+      try {
+        await userService.signOut();
+      } catch (error) {
+        alert("Не удалось выйти");
+      }
+    }
   },
 
-  created() {
-    this.userStore.loadUserFromLocalStorage();
-    this.getFreshNews();
+  async created() {
+    try {
+      await userService.refreshToken(this.userStore);
+      this.userStore.loadUserFromLocalStorage();
+    }
+    catch {
+      alert("Пользователь не авторизован, либо срок действия токенов истек");
+    }
+    finally {
+      this.getFreshNews();
+    }
   },
 };
 </script>

@@ -10,15 +10,12 @@ export const likesService = {
         return likesService.deleteLike(news);
       }
 
-      return likesApi.saveLike(news.id);
+      return await likesApi.saveLike(news.id);
     } catch (error) {
       try {
-        await userService.refreshToken();
-        await this.saveLike(news, user);
+        await userService.refreshToken(user);
+        this.saveLike(news, user);
       } catch (error) {
-        console.log('unautorized');
-        user.deleteUserFromLocalStorage();
-        user.$reset();
         throw error;
       }
     }

@@ -24,11 +24,15 @@
     type="text"
     placeholder="Введите пароль"
   />
-  <div v-if="showErrorMessage">Пользователь с такой почтой уже существует</div>
+  <div v-if="showErrorMessage">
+    Ошибка при отправке запроса на сервер или пользователь с данной почтой уже
+    сущестует. Попробуйте еще раз.
+  </div>
   <button style="margin-top: 15px" @click="signup">Зарегистрироваться</button>
 </template>
 
 <script>
+import { userService } from "../services/UserService";
 
 export default {
   components: {},
@@ -43,7 +47,14 @@ export default {
   },
 
   methods: {
-    signup() {
+    async signup() {
+      try {
+        await userService.signUp(this.name, this.surname, this.email, this.password);
+        this.$router.push('login')
+        alert('Вы успешно зарегистрировались. Авторизуйтесь.');
+      } catch (error) {
+        this.showErrorMessage = true;
+      }
       // authenticationApi
       //   .signUp(this.name, this.surname, this.email, this.password)
       //   .then(() => this.$router.push('login'))

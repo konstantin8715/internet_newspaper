@@ -32,13 +32,13 @@ export const authenticationApi = {
         });
     },
 
-    signOut(refreshToken) {
+    signOut() {
         return axios({
-            method: 'post',
-            url: 'http://localhost:8080/auth/sign-out',
-            data: {
-                refreshToken,
-            },
+          method: "post",
+          url: "http://localhost:8080/auth/sign-out",
+          data: {
+            refreshToken: localStorage.getItem("refreshToken"),
+          },
         });
     },
 }
