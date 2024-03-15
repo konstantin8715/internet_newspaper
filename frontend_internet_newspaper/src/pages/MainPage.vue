@@ -27,15 +27,14 @@
 
       <button
         v-if="!this.showComments"
-        @click="loadComments(n)"
+        @click="
+          this.isCommentsLoaded ? (this.showComments = true) : loadComments(n)
+        "
       >
         Показать комметарии
       </button>
 
-      <button
-        v-if="this.showComments"
-        @click="this.showComments = false"
-      >
+      <button v-if="this.showComments" @click="this.showComments = false">
         Скрыть комментарии
       </button>
 
@@ -67,6 +66,7 @@ export default {
       userStore: useUserStore(),
       newsStore: useNewsStore(),
       showComments: false,
+      isCommentsLoaded: false,
     };
   },
 
@@ -102,6 +102,7 @@ export default {
       try {
         await this.newsStore.loadCommentsForNews(news);
         this.showComments = true;
+        this.isCommentsLoaded = true;
       } catch (error) {
         alert("Не удалось загрузить комментарии");
       }
