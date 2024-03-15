@@ -1,6 +1,5 @@
 import { likesApi } from "../api/LikesApi";
 import { userService } from "../services/UserService";
-import { newsService } from "../services/NewsService";
 
 export const likesService = {
   async saveLike(news, user) {

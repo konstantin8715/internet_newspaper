@@ -3,7 +3,7 @@ import {useUserStore} from '../stores/UserStore';
 
 export const newsService = {
 
-    async getFreshNews(email, password) {
+    async getFreshNews() {
         try {
             const response = await newsApi.getFreshNews();
             const data = response.data;

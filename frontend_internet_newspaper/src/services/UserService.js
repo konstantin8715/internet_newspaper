@@ -32,7 +32,6 @@ export const userService = {
       return response;
     } catch (error) {
       // TODO: Сделать свои объекты ошибок
-      console.log("unautorized");
       user.deleteUserFromLocalStorage();
       user.$reset();
       throw error;

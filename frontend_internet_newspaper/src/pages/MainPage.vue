@@ -14,32 +14,59 @@
   <div class="container">
     <div
       class="news"
-      v-for="n in news"
+      v-for="n in this.newsStore.news"
       :key="n.id"
       style="border: solid red; margin-top: 20px"
     >
-      <h3>{{ n.newsTitle }}</h3>
-      <div>{{ n.newsText }}</div>
-      <img width="500px" length="250px" :src="n.picture.url" /><br />
+      <h3>{{ n.title }}</h3>
+      <div>{{ n.text }}</div>
+      <img width="500px" length="250px" :src="n.pictureUrl" /><br />
       <button @click="likeNews(n)">
-        Количество лайков: {{ n.likes.length }}
+        Количество лайков: {{ n.likes.length }}</button
+      ><br />
+
+      <button
+        v-if="!this.showComments"
+        @click="loadComments(n)"
+      >
+        Показать комметарии
       </button>
+
+      <button
+        v-if="this.showComments"
+        @click="this.showComments = false"
+      >
+        Скрыть комментарии
+      </button>
+
+      <div v-if="this.showComments">
+        <div v-for="c in n.comments">
+          {{ c.textComment }}
+        </div>
+        <button
+          v-if="n.comments.length < n.countOfComments"
+          @click="loadComments(n)"
+        >
+          Показать еще комментарии
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { newsService } from "../services/NewsService";
 import { likesService } from "../services/LikesService";
 import { userService } from "../services/UserService";
 import { useUserStore } from "../stores/UserStore";
+import { useNewsStore } from "../stores/NewsStore";
 
 export default {
   components: {},
   data() {
     return {
-      news: [],
       userStore: useUserStore(),
+      newsStore: useNewsStore(),
+      showComments: false,
     };
   },
 
@@ -49,13 +76,15 @@ export default {
         await likesService.saveLike(news, this.userStore);
         this.getFreshNews();
       } catch (error) {
-        alert("Пользователь не авторизован, либо срок действия токенов истек");
+        console.log(
+          "Пользователь не авторизован, либо срок действия токенов истек"
+        );
       }
     },
-    
+
     async getFreshNews() {
       try {
-        this.news = await newsService.getFreshNews();
+        await this.newsStore.loadNews();
       } catch (error) {
         alert("Ошибка при загрузке новостей");
       }
@@ -67,18 +96,27 @@ export default {
       } catch (error) {
         alert("Не удалось выйти");
       }
-    }
+    },
+
+    async loadComments(news) {
+      try {
+        await this.newsStore.loadCommentsForNews(news);
+        this.showComments = true;
+      } catch (error) {
+        alert("Не удалось загрузить комментарии");
+      }
+    },
   },
 
   async created() {
     try {
       await userService.refreshToken(this.userStore);
       this.userStore.loadUserFromLocalStorage();
-    }
-    catch {
-      alert("Пользователь не авторизован, либо срок действия токенов истек");
-    }
-    finally {
+    } catch {
+      console.log(
+        "Пользователь не авторизован, либо срок действия токенов истек"
+      );
+    } finally {
       this.getFreshNews();
     }
   },

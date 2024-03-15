@@ -2,8 +2,6 @@ import {
     defineStore
 } from 'pinia';
 
-import {authenticationApi} from '../api/UserApi';
-
 export const useUserStore = defineStore('userStore', {
     state: () => ({
         id: '',
