@@ -5,11 +5,11 @@
   >
     {{ this.userStore.name }}
     {{ this.userStore.surname }}
-    <button @click="signOut">Sign out</button>
+    <button @click="signOut">Выйти</button>
   </div>
   <div v-else>
-    <button @click="$router.push('login')">Log in</button>
-    <button @click="$router.push('signup')">Sign up</button>
+    <button @click="$router.push('login')">Войти</button>
+    <button @click="$router.push('signup')">Зарегистрироваться</button>
   </div>
   <div class="container">
     <div
@@ -26,28 +26,44 @@
       ><br />
 
       <button
-        v-if="!this.showComments"
+        v-if="!n.showComments"
         @click="
-          this.isCommentsLoaded ? (this.showComments = true) : loadComments(n)
+          n.isCommentsLoaded ? (n.showComments = true) : loadComments(n)
         "
+        style="display: block; margin-top: 15px; margin: 0 auto;"
       >
         Показать комметарии
       </button>
 
-      <button v-if="this.showComments" @click="this.showComments = false">
+      <button
+        v-if="n.showComments"
+        @click="n.showComments = false"
+        style="display: block; margin-top: 15px; margin: 0 auto;"
+      >
         Скрыть комментарии
       </button>
 
-      <div v-if="this.showComments">
+      <div
+        style="display: flex; align-items: center; flex-direction: column"
+        v-if="n.showComments"
+      >
         <div v-for="c in n.comments">
           {{ c.textComment }}
         </div>
         <button
+          style="display: block; margin-top: 15px"
           v-if="n.comments.length < n.countOfComments"
           @click="loadComments(n)"
         >
           Показать еще комментарии
         </button>
+
+        <textarea
+          placeholder="Введите комментарий"
+          cols="30"
+          rows="10"
+        ></textarea>
+        <button style="display: block; margin-top: 15px">Отправить</button>
       </div>
     </div>
   </div>
@@ -65,8 +81,6 @@ export default {
     return {
       userStore: useUserStore(),
       newsStore: useNewsStore(),
-      showComments: false,
-      isCommentsLoaded: false,
     };
   },
 
@@ -101,8 +115,6 @@ export default {
     async loadComments(news) {
       try {
         await this.newsStore.loadCommentsForNews(news);
-        this.showComments = true;
-        this.isCommentsLoaded = true;
       } catch (error) {
         alert("Не удалось загрузить комментарии");
       }

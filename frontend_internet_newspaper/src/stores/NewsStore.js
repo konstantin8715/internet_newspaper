@@ -30,6 +30,8 @@ export const useNewsStore = defineStore("useNewsStore", {
           likes: n.likes,
           comments: [],
           countOfComments: await commentsService.checkExistComment(n.id),
+          showComments: false,
+          isCommentsLoaded: false,
         });
       });
     },
@@ -38,6 +40,8 @@ export const useNewsStore = defineStore("useNewsStore", {
       try {
         const comments = await commentsService.getCommentsForNews(news);
         comments.forEach((c) => news.comments.push(c));
+        news.showComments = true;
+        news.isCommentsLoaded = true;
       } catch (error) {
         throw error;
       }
