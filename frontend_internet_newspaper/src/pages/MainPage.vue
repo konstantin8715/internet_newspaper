@@ -27,10 +27,8 @@
 
       <button
         v-if="!n.showComments"
-        @click="
-          n.isCommentsLoaded ? (n.showComments = true) : loadComments(n)
-        "
-        style="display: block; margin-top: 15px; margin: 0 auto;"
+        @click="n.isCommentsLoaded ? (n.showComments = true) : loadComments(n)"
+        style="display: block; margin-top: 15px; margin: 0 auto"
       >
         Показать комметарии
       </button>
@@ -38,7 +36,7 @@
       <button
         v-if="n.showComments"
         @click="n.showComments = false"
-        style="display: block; margin-top: 15px; margin: 0 auto;"
+        style="display: block; margin-top: 15px; margin: 0 auto"
       >
         Скрыть комментарии
       </button>
@@ -59,11 +57,18 @@
         </button>
 
         <textarea
+          v-model="comment"
+          style="margin-top: 15px"
           placeholder="Введите комментарий"
-          cols="30"
-          rows="10"
+          cols="40"
+          rows="5"
         ></textarea>
-        <button style="display: block; margin-top: 15px">Отправить</button>
+        <button
+          style="display: block; margin-top: 15px;"
+          @click="saveCommentForNews(n)"
+        >
+          Отправить
+        </button>
       </div>
     </div>
   </div>
@@ -81,6 +86,7 @@ export default {
     return {
       userStore: useUserStore(),
       newsStore: useNewsStore(),
+      comment: "",
     };
   },
 
@@ -117,6 +123,18 @@ export default {
         await this.newsStore.loadCommentsForNews(news);
       } catch (error) {
         alert("Не удалось загрузить комментарии");
+      }
+    },
+
+    async saveCommentForNews(news) {
+      try {
+        await this.newsStore.saveCommentForNews(news.id, this.comment);
+        this.loadComments(news);
+        this.comment = "";
+      } catch (error) {
+        console.log(
+          "Пользователь не авторизован, либо срок действия токенов истек"
+        );
       }
     },
   },

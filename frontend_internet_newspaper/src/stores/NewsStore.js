@@ -46,5 +46,13 @@ export const useNewsStore = defineStore("useNewsStore", {
         throw error;
       }
     },
+
+    async saveCommentForNews(newsId, textComment) {
+      try {
+        return await commentsService.saveComment(newsId, textComment);
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 });

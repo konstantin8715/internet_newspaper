@@ -25,4 +25,12 @@ export const commentsService = {
     const countOfComments = countOfCommentsData.data.countComment;
     return countOfComments;
   },
+
+  async saveComment(newsId, textComment) {
+    try {
+      return await commentsApi.saveComment(newsId, textComment);
+    } catch (error) {
+      throw error;
+    }
+  }
 };
