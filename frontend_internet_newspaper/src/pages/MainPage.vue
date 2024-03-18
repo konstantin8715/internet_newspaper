@@ -16,7 +16,7 @@
       class="news"
       v-for="n in this.newsStore.news"
       :key="n.id"
-      style="border: solid red; margin-top: 20px"
+      style="border: solid red; margin-top: 20px; padding: 25px"
     >
       <h3>{{ n.title }}</h3>
       <div>{{ n.text }}</div>
@@ -42,19 +42,29 @@
       </button>
 
       <div
-        style="display: flex; align-items: center; flex-direction: column"
+        style="
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          margin: 0 auto;
+          padding: 15px;
+          margin-top: 20px;
+          border: 2px solid white;
+          width: 70%;
+        "
         v-if="n.showComments"
       >
-        <div v-for="c in n.comments">
-          {{ c.textComment }}
-        </div>
         <button
           style="display: block; margin-top: 15px"
           v-if="n.comments.length < n.countOfComments"
           @click="loadComments(n)"
         >
-          Показать еще комментарии
+          Показать предыдущие комментарии
         </button>
+
+        <div v-for="c in sortedComments(n)">
+          {{ c.textComment }}
+        </div>
 
         <textarea
           v-model="comment"
@@ -64,7 +74,7 @@
           rows="5"
         ></textarea>
         <button
-          style="display: block; margin-top: 15px;"
+          style="display: block; margin-top: 15px"
           @click="saveCommentForNews(n)"
         >
           Отправить
@@ -122,20 +132,27 @@ export default {
       try {
         await this.newsStore.loadCommentsForNews(news);
       } catch (error) {
+        console.log(error);
         alert("Не удалось загрузить комментарии");
       }
     },
 
     async saveCommentForNews(news) {
       try {
-        await this.newsStore.saveCommentForNews(news.id, this.comment);
-        this.loadComments(news);
+        const newComment = await this.newsStore.saveCommentForNews(news.id, this.comment);
+        news.comments.push("newComment");
         this.comment = "";
       } catch (error) {
         console.log(
           "Пользователь не авторизован, либо срок действия токенов истек"
         );
       }
+    },
+
+    sortedComments(n) {
+      return n.comments.sort(
+        (c1, c2) => c1.datePublishedComment - c2.datePublishedComment
+      );
     },
   },
 

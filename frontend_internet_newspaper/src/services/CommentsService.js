@@ -5,16 +5,24 @@ export const commentsService = {
   async getCommentsForNews(news) {
     try {
       const comments = [];
-      for (let i = 0; i < Math.min(news.countOfComments - news.comments.length, 3); i++) {
+
+      for (
+        let i = 0;
+        i < Math.min(news.countOfComments - news.comments.length, 3);
+        i++
+      ) {
         const commentData = await commentsApi.getCommentsForNews(news.id);
         const comment = {
           id: commentData.data[0].id,
           textComment: commentData.data[0].textComment,
-          datePublishedComment: commentData.data[0].datePublishedComment,
+          datePublishedComment: new Date(
+            commentData.data[0].datePublishedComment
+          ),
         };
         comments.push(comment);
       }
-      return comments;
+
+      return comments
     } catch (error) {
       throw error;
     }
@@ -32,5 +40,5 @@ export const commentsService = {
     } catch (error) {
       throw error;
     }
-  }
+  },
 };

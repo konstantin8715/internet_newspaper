@@ -40,6 +40,7 @@ export const useNewsStore = defineStore("useNewsStore", {
       try {
         const comments = await commentsService.getCommentsForNews(news);
         comments.forEach((c) => news.comments.push(c));
+        // console.log(comments);
         news.showComments = true;
         news.isCommentsLoaded = true;
       } catch (error) {
