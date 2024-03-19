@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 
 import { newsService } from "../services/NewsService";
 import { commentsService } from "../services/CommentsService";
+import { likesService } from "../services/LikesService";
 
 export const useNewsStore = defineStore("useNewsStore", {
   state: () => ({
@@ -40,7 +41,6 @@ export const useNewsStore = defineStore("useNewsStore", {
       try {
         const comments = await commentsService.getCommentsForNews(news);
         comments.forEach((c) => news.comments.push(c));
-        // console.log(comments);
         news.showComments = true;
         news.isCommentsLoaded = true;
       } catch (error) {
@@ -53,6 +53,25 @@ export const useNewsStore = defineStore("useNewsStore", {
         return await commentsService.saveComment(newsId, textComment);
       } catch (error) {
         console.log(error);
+      }
+    },
+
+    async saveLikeForNews(news, user) {
+      try {
+        const liked = news.likes.find(
+          (like) => like.user.id == user.id || like.user.id == -1
+        );
+        console.log(liked);
+
+        if (liked) {
+          await likesService.deleteLike(news, user);
+          news.likes = news.likes.filter((like) => like !== liked);
+        } else {
+          await likesService.saveLike(news, user);
+          news.likes.push({ user: { id: -1 } });
+        }
+      } catch (error) {
+        throw error;
       }
     },
   },

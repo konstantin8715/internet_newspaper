@@ -4,12 +4,7 @@ import { userService } from "../services/UserService";
 export const likesService = {
   async saveLike(news, user) {
     try {
-      const like = news.likes.find((like) => like.user.id == user.id);
-      if (like) {
-        return likesService.deleteLike(news);
-      }
-
-      return await likesApi.saveLike(news.id);
+      await likesApi.saveLike(news.id);
     } catch (error) {
       try {
         await userService.refreshToken(user);
@@ -20,11 +15,16 @@ export const likesService = {
     }
   },
 
-  async deleteLike(news) {
+  async deleteLike(news, user) {
     try {
       await likesApi.deleteLike(news.id);
     } catch (error) {
-      throw error;
+      try {
+        await userService.refreshToken(user);
+        this.deleteLike(news, user);
+      } catch (error) {
+        throw error;
+      }
     }
   },
 };

@@ -103,9 +103,9 @@ export default {
   methods: {
     async likeNews(news) {
       try {
-        await likesService.saveLike(news, this.userStore);
-        this.getFreshNews();
+        await this.newsStore.saveLikeForNews(news, this.userStore);
       } catch (error) {
+        console.log(error);
         console.log(
           "Пользователь не авторизован, либо срок действия токенов истек"
         );
