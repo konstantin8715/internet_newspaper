@@ -6,21 +6,12 @@ import { likesService } from "../services/LikesService";
 
 export const useNewsStore = defineStore("useNewsStore", {
   state: () => ({
-    news: [
-      //   {
-      //     id: "",
-      //     title: "",
-      //     text: "",
-      //     pictureUrl: "",
-      //     likes: [],
-      //     comments: [],
-      //     loadedComments: 0;
-      //   },
-    ],
+    news: [],
   }),
 
   actions: {
     async loadNews() {
+      // console.log("newsStore.loadNews()");
       const news = await newsService.getFreshNews();
       news.forEach(async (n) => {
         this.news.push({
@@ -56,19 +47,26 @@ export const useNewsStore = defineStore("useNewsStore", {
       }
     },
 
-    async saveLikeForNews(news, user) {
+    async saveLikeForNews(news, userStore) {
       try {
+        // console.log('newsStore.saveLikeForNews()');
         const liked = news.likes.find(
-          (like) => like.user.id == user.id || like.user.id == -1
+          (like) => like.user.id == userStore.id /*|| like.user.id == -1*/
         );
+        console.log(news.likes);
+        console.log(userStore.id);
         console.log(liked);
 
         if (liked) {
-          await likesService.deleteLike(news, user);
+          await likesService.deleteLike(news, userStore);
           news.likes = news.likes.filter((like) => like !== liked);
         } else {
-          await likesService.saveLike(news, user);
-          news.likes.push({ user: { id: -1 } });
+          await likesService.saveLike(news, userStore);
+          news.likes.push({
+            user: {
+              id: userStore.id,
+            },
+          });
         }
       } catch (error) {
         throw error;

@@ -104,8 +104,9 @@ export default {
     async likeNews(news) {
       try {
         await this.newsStore.saveLikeForNews(news, this.userStore);
+        // TODO: Узнать оптимально ли такое решение
+        // this.getFreshNews();
       } catch (error) {
-        console.log(error);
         console.log(
           "Пользователь не авторизован, либо срок действия токенов истек"
         );
@@ -122,7 +123,7 @@ export default {
 
     async signOut() {
       try {
-        await userService.signOut();
+        await this.userStore.signOut();
       } catch (error) {
         alert("Не удалось выйти");
       }
@@ -165,7 +166,9 @@ export default {
         "Пользователь не авторизован, либо срок действия токенов истек"
       );
     } finally {
-      this.getFreshNews();
+      if (this.newsStore.news.length === 0) {
+        this.getFreshNews();
+      }
     }
   },
 };
