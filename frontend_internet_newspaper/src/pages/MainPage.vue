@@ -104,8 +104,6 @@ export default {
     async likeNews(news) {
       try {
         await this.newsStore.saveLikeForNews(news, this.userStore);
-        // TODO: Узнать оптимально ли такое решение
-        // this.getFreshNews();
       } catch (error) {
         console.log(
           "Пользователь не авторизован, либо срок действия токенов истек"
@@ -121,14 +119,6 @@ export default {
       }
     },
 
-    async signOut() {
-      try {
-        await this.userStore.signOut();
-      } catch (error) {
-        alert("Не удалось выйти");
-      }
-    },
-
     async loadComments(news) {
       try {
         await this.newsStore.loadCommentsForNews(news);
@@ -140,8 +130,8 @@ export default {
 
     async saveCommentForNews(news) {
       try {
-        const newComment = await this.newsStore.saveCommentForNews(news.id, this.comment);
-        news.comments.push("newComment");
+        await this.newsStore.saveCommentForNews(news, this.comment);
+        // console.log(news.comments);
         this.comment = "";
       } catch (error) {
         console.log(
@@ -154,6 +144,14 @@ export default {
       return n.comments.sort(
         (c1, c2) => c1.datePublishedComment - c2.datePublishedComment
       );
+    },
+
+    async signOut() {
+      try {
+        await this.userStore.signOut();
+      } catch (error) {
+        alert("Не удалось выйти");
+      }
     },
   },
 

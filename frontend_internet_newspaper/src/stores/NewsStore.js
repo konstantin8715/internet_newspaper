@@ -30,8 +30,11 @@ export const useNewsStore = defineStore("useNewsStore", {
 
     async loadCommentsForNews(news) {
       try {
+        // console.log(news.comments);
         const comments = await commentsService.getCommentsForNews(news);
+        // console.log(comments);
         comments.forEach((c) => news.comments.push(c));
+        // console.log(news.comments);
         news.showComments = true;
         news.isCommentsLoaded = true;
       } catch (error) {
@@ -39,9 +42,14 @@ export const useNewsStore = defineStore("useNewsStore", {
       }
     },
 
-    async saveCommentForNews(newsId, textComment) {
+    async saveCommentForNews(news, textComment) {
       try {
-        return await commentsService.saveComment(newsId, textComment);
+        const newComment = await commentsService.saveComment(news.id, textComment);
+        newComment.data.datePublishedComment = new Date(
+          newComment.data.datePublishedComment
+        )
+        news.comments.push(newComment.data);
+        news.countOfComments++;
       } catch (error) {
         console.log(error);
       }
@@ -49,13 +57,9 @@ export const useNewsStore = defineStore("useNewsStore", {
 
     async saveLikeForNews(news, userStore) {
       try {
-        // console.log('newsStore.saveLikeForNews()');
         const liked = news.likes.find(
-          (like) => like.user.id == userStore.id /*|| like.user.id == -1*/
+          (like) => like.user.id == userStore.id
         );
-        console.log(news.likes);
-        console.log(userStore.id);
-        console.log(liked);
 
         if (liked) {
           await likesService.deleteLike(news, userStore);
