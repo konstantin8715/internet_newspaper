@@ -31,6 +31,7 @@ export const userService = {
       const response = await userApi.refreshToken();
       const data = response.data;
       localStorage.setItem("accessToken", data.accessToken);
+      console.log('refreshToken');
       return response;
     } catch (error) {
       // TODO: Сделать свои объекты ошибок

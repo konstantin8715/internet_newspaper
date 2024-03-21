@@ -12,17 +12,12 @@ export const commentsService = {
         i++
       ) {
         const commentData = await commentsApi.getCommentsForNews(news.id);
-        const comment = {
-          id: commentData.data[0].id,
-          textComment: commentData.data[0].textComment,
-          datePublishedComment: new Date(
-            commentData.data[0].datePublishedComment
-          ),
-        };
+        const comment = commentData.data[0];
+        comment.datePublishedComment = new Date(comment.datePublishedComment);
         comments.push(comment);
       }
-
-      return comments
+      
+      return comments;
     } catch (error) {
       throw error;
     }
@@ -34,11 +29,29 @@ export const commentsService = {
     return countOfComments;
   },
 
-  async saveComment(newsId, textComment) {
+  async saveComment(newsId, textComment, user) {
     try {
       return await commentsApi.saveComment(newsId, textComment);
     } catch (error) {
-      throw error;
+      try {
+        await userService.refreshToken(user);
+        this.saveComment(newsId, textComment, user);
+      } catch (error) {
+        throw error;
+      }
+    }
+  },
+
+  async userDeleteComment(commentId, user) {
+    try {
+      await commentsApi.userDeleteComment(commentId);
+    } catch (error) {
+      try {
+        await userService.refreshToken(user);
+        this.userDeleteComment(commentId, user);
+      } catch (error) {
+        throw error;
+      }
     }
   },
 };

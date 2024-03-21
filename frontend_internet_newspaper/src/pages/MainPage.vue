@@ -62,8 +62,24 @@
           Показать предыдущие комментарии
         </button>
 
-        <div v-for="c in sortedComments(n)">
-          {{ c.textComment }}
+        <div
+          style="
+            display: flex;
+            border: 2px solid white;
+            margin-top: 15px;
+            width: 100%;
+          "
+          v-for="c in sortedComments(n)"
+        >
+          <div style="width: 100%">
+            {{ c.textComment }}
+          </div>
+          <button
+            v-if="c.user.id == this.userStore.id"
+            @click="deleteComment(n, c)"
+          >
+            Удалить
+          </button>
         </div>
 
         <textarea
@@ -72,10 +88,21 @@
           placeholder="Введите комментарий"
           cols="40"
           rows="5"
+          v-if="
+            this.userStore.name &&
+            this.userStore.surname &&
+            this.userStore.roles
+          "
         ></textarea>
         <button
           style="display: block; margin-top: 15px"
           @click="saveCommentForNews(n)"
+          v-if="
+            this.userStore.name &&
+            this.userStore.surname &&
+            this.userStore.roles &&
+            this.comment
+          "
         >
           Отправить
         </button>
@@ -130,13 +157,29 @@ export default {
 
     async saveCommentForNews(news) {
       try {
-        await this.newsStore.saveCommentForNews(news, this.comment);
+        await this.newsStore.saveCommentForNews(
+          news,
+          this.comment,
+          this.userStore
+        );
         // console.log(news.comments);
         this.comment = "";
       } catch (error) {
         console.log(
           "Пользователь не авторизован, либо срок действия токенов истек"
         );
+      }
+    },
+
+    async deleteComment(news, comment) {
+      try {
+        await this.newsStore.deleteCommentForNews(
+          news,
+          comment.id,
+          this.userStore
+        );
+      } catch (error) {
+        console.log("Не удалось удалить комментарий");
       }
     },
 
