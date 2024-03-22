@@ -21,22 +21,22 @@
       >
 
       <v-dialog v-model="n.change" width="auto">
-        <v-card
-          max-width="700"
-          prepend-icon="mdi-update"
-          title="Update news"
-        >
-          <input v-model="this.updateTitle">
+        <v-card max-width="700" prepend-icon="mdi-update" title="Update news">
+          <input v-model="this.updateTitle" />
           <textarea v-model="this.updateText" cols="100" rows="40"></textarea>
           <template v-slot:actions>
-            <v-btn class="ms-auto" @click="updateNews(n)">Подтвердить изменения</v-btn>
+            <v-btn class="ms-auto" @click="updateNews(n)"
+              >Подтвердить изменения</v-btn
+            >
             <v-btn class="ms-auto" @click="n.change = false">Отмена</v-btn>
           </template>
         </v-card>
       </v-dialog>
       <!-- Изменение новости -->
 
-      <h3>{{ n.newsTitle }} <span style="color: red">id: {{ n.id }}</span></h3>
+      <h3>
+        {{ n.newsTitle }} <span style="color: red">id: {{ n.id }}</span>
+      </h3>
       <div>{{ n.newsText }}</div>
       <img width="500px" length="250px" :src="n.picture.url" /><br />
       <button @click="likeNews(n)">
@@ -117,6 +117,25 @@
         </button>
       </div>
     </div>
+    <!-- Добавление новости -->
+    <v-btn v-if="this.userStore.isAdmin" @click="this.createNewsFlag = true"
+      >Добавить новость</v-btn
+    >
+
+    <v-dialog v-model="this.createNewsFlag" width="auto">
+      <v-card max-width="700" prepend-icon="mdi-update" title="Update news">
+        <input v-model="this.createNewsTitle" />
+        <textarea v-model="this.createNewsText" cols="100" rows="40"></textarea>
+        <input v-model="this.createNewsPictureUrl" placeholder="pictureUrl">
+        <template v-slot:actions>
+          <v-btn class="ms-auto" @click="createNews()"
+            >Подтвердить изменения</v-btn
+          >
+          <v-btn class="ms-auto" @click="this.createNewsFlag = false">Отмена</v-btn>
+        </template>
+      </v-card>
+    </v-dialog>
+    <!-- Добавление новости -->
   </div>
 </template>
 
@@ -134,6 +153,10 @@ export default {
       newsStore: useNewsStore(),
       updateTitle: "",
       updateText: "",
+      createNewsFlag: false,
+      createNewsTitle: "",
+      createNewsText: "",
+      createNewsPictureUrl: "",
       comment: "",
     };
   },
@@ -219,6 +242,27 @@ export default {
       } catch (error) {
         console.log(error);
         alert("Не удалось обновить новость");
+      }
+    },
+
+    async createNews() {
+      try {
+        const createdNews = {
+          newsTitle: this.createNewsTitle,
+          newsText: this.createNewsText,
+          picture: {
+            url: this.createNewsPictureUrl,
+          },
+        };
+        await this.newsStore.createNews(createdNews, this.userStore);
+        this.createNewsTitle = "";
+        this.createNewsText = "";
+        this.createNewsPictureUrl = "";
+        this.createNewsFlag = false;
+        this.getFreshNews();
+      } catch (error) {
+        console.log(error);
+        alert("Не удалось создать новость");
       }
     },
 

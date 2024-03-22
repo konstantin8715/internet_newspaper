@@ -26,4 +26,18 @@ export const newsService = {
       throw error;
     }
   },
+
+  async createNews(news, admin) {
+    try {
+      await newsApi.createNews(news);
+    } catch (error) {
+      try {
+        await userService.refreshToken(admin);
+        this.createNews(news, admin);
+      } catch (error) {
+        throw error;
+      }
+      throw error;
+    }
+  },
 };

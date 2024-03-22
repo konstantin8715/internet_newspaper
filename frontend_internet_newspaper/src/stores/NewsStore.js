@@ -16,9 +16,7 @@ export const useNewsStore = defineStore("useNewsStore", {
       news.forEach(async (n) => {
         this.news.push(n);
         n.comments = [];
-        n.countOfComments = await commentsService.checkExistComment(
-          n.id
-        );
+        n.countOfComments = await commentsService.checkExistComment(n.id);
         n.showComments = false;
         n.isCommentsLoaded = false;
         n.change = false;
@@ -49,6 +47,22 @@ export const useNewsStore = defineStore("useNewsStore", {
           themes: news.themes,
         };
         await newsService.updateNews(requestNews, userStore);
+      } catch (error) {
+        throw error;
+      }
+    },
+
+    async createNews(news, userStore) {
+      try {
+        const requestNews = {
+          newsTitle: news.newsTitle,
+          newsText: news.newsText,
+          datePublishedNews: new Date(),
+          likes: [],
+          picture: news.picture,
+          themes: [],
+        };
+        await newsService.createNews(requestNews, userStore);
       } catch (error) {
         throw error;
       }
