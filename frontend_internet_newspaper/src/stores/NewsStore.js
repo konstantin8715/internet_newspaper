@@ -14,17 +14,14 @@ export const useNewsStore = defineStore("useNewsStore", {
       // console.log("newsStore.loadNews()");
       const news = await newsService.getFreshNews();
       news.forEach(async (n) => {
-        this.news.push({
-          id: n.id,
-          title: n.newsTitle,
-          text: n.newsText,
-          pictureUrl: n.picture.url,
-          likes: n.likes,
-          comments: [],
-          countOfComments: await commentsService.checkExistComment(n.id),
-          showComments: false,
-          isCommentsLoaded: false,
-        });
+        this.news.push(n);
+        n.comments = [];
+        n.countOfComments = await commentsService.checkExistComment(
+          n.id
+        );
+        n.showComments = false;
+        n.isCommentsLoaded = false;
+        n.change = false;
       });
     },
 
@@ -35,6 +32,23 @@ export const useNewsStore = defineStore("useNewsStore", {
         // comments.forEach((c) => news.comments.push(c));
         news.showComments = true;
         news.isCommentsLoaded = true;
+      } catch (error) {
+        throw error;
+      }
+    },
+
+    async updateNews(news, userStore) {
+      try {
+        const requestNews = {
+          id: news.id,
+          newsTitle: news.newsTitle,
+          newsText: news.newsText,
+          datePublishedNews: news.datePublishedNews,
+          likes: news.likes,
+          picture: news.picture,
+          themes: news.themes,
+        };
+        await newsService.updateNews(requestNews, userStore);
       } catch (error) {
         throw error;
       }

@@ -1,5 +1,4 @@
 <template>
-  <!-- TODO: Сделать то, что в v-if getterом в UserStore -->
   <div v-if="this.userStore.isUser">
     {{ this.userStore.name }}
     {{ this.userStore.surname }}
@@ -16,10 +15,30 @@
       :key="n.id"
       style="border: solid red; margin-top: 20px; padding: 25px"
     >
-      <button v-if="this.userStore.isAdmin">Изменить новость</button>
-      <h3>{{ n.title }}</h3>
-      <div>{{ n.text }}</div>
-      <img width="500px" length="250px" :src="n.pictureUrl" /><br />
+      <!-- Изменение новости -->
+      <v-btn v-if="this.userStore.isAdmin" @click="openDialog(n)"
+        >Изменить новость</v-btn
+      >
+
+      <v-dialog v-model="n.change" width="auto">
+        <v-card
+          max-width="700"
+          prepend-icon="mdi-update"
+          title="Update news"
+        >
+          <input v-model="this.updateTitle">
+          <textarea v-model="this.updateText" cols="100" rows="40"></textarea>
+          <template v-slot:actions>
+            <v-btn class="ms-auto" @click="updateNews(n)">Подтвердить изменения</v-btn>
+            <v-btn class="ms-auto" @click="n.change = false">Отмена</v-btn>
+          </template>
+        </v-card>
+      </v-dialog>
+      <!-- Изменение новости -->
+
+      <h3>{{ n.newsTitle }} <span style="color: red">id: {{ n.id }}</span></h3>
+      <div>{{ n.newsText }}</div>
+      <img width="500px" length="250px" :src="n.picture.url" /><br />
       <button @click="likeNews(n)">
         Количество лайков: {{ n.likes.length }}</button
       ><br />
@@ -113,6 +132,8 @@ export default {
     return {
       userStore: useUserStore(),
       newsStore: useNewsStore(),
+      updateTitle: "",
+      updateText: "",
       comment: "",
     };
   },
@@ -169,8 +190,7 @@ export default {
             comment.id,
             this.userStore
           );
-        }
-        else {
+        } else {
           await this.newsStore.deleteCommentForNews(
             news,
             comment.id,
@@ -179,6 +199,26 @@ export default {
         }
       } catch (error) {
         console.log("Не удалось удалить комментарий");
+      }
+    },
+
+    openDialog(news) {
+      news.change = true;
+      this.updateTitle = news.newsTitle;
+      this.updateText = news.newsText;
+    },
+
+    async updateNews(news) {
+      try {
+        news.newsTitle = this.updateTitle;
+        news.newsText = this.updateText;
+        await this.newsStore.updateNews(news, this.userStore);
+        this.newsTitle = "";
+        this.newsText = "";
+        news.change = false;
+      } catch (error) {
+        console.log(error);
+        alert("Не удалось обновить новость");
       }
     },
 
