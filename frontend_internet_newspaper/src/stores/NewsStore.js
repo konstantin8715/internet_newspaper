@@ -67,6 +67,16 @@ export const useNewsStore = defineStore("useNewsStore", {
       }
     },
 
+    async adminDeleteCommentForNews(news, commentId, userStore) {
+      try {
+        await commentsService.adminDeleteComment(commentId, userStore);
+        news.countOfComments = await commentsService.checkExistComment(news.id);
+        news.comments = news.comments.filter((c) => c.id != commentId);
+      } catch (error) {
+        throw error;
+      }
+    },
+
     async saveLikeForNews(news, userStore) {
       try {
         const liked = news.likes.find((like) => like.user.id == userStore.id);

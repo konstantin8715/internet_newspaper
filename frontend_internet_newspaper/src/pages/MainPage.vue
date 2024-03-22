@@ -1,8 +1,6 @@
 <template>
   <!-- TODO: Сделать то, что в v-if getterом в UserStore -->
-  <div
-    v-if="this.userStore.name && this.userStore.surname && this.userStore.roles"
-  >
+  <div v-if="this.userStore.isUser">
     {{ this.userStore.name }}
     {{ this.userStore.surname }}
     <button @click="signOut">Выйти</button>
@@ -18,6 +16,7 @@
       :key="n.id"
       style="border: solid red; margin-top: 20px; padding: 25px"
     >
+      <button v-if="this.userStore.isAdmin">Изменить новость</button>
       <h3>{{ n.title }}</h3>
       <div>{{ n.text }}</div>
       <img width="500px" length="250px" :src="n.pictureUrl" /><br />
@@ -75,7 +74,7 @@
             {{ c.textComment }}
           </div>
           <button
-            v-if="c.user.id == this.userStore.id"
+            v-if="c.user.id == this.userStore.id || this.userStore.isAdmin"
             @click="deleteComment(n, c)"
           >
             Удалить
@@ -88,21 +87,12 @@
           placeholder="Введите комментарий"
           cols="40"
           rows="5"
-          v-if="
-            this.userStore.name &&
-            this.userStore.surname &&
-            this.userStore.roles
-          "
+          v-if="this.userStore.isUser && this.userStore.roles"
         ></textarea>
         <button
           style="display: block; margin-top: 15px"
           @click="saveCommentForNews(n)"
-          v-if="
-            this.userStore.name &&
-            this.userStore.surname &&
-            this.userStore.roles &&
-            this.comment
-          "
+          v-if="this.userStore.isUser && this.comment"
         >
           Отправить
         </button>
@@ -173,11 +163,20 @@ export default {
 
     async deleteComment(news, comment) {
       try {
-        await this.newsStore.deleteCommentForNews(
-          news,
-          comment.id,
-          this.userStore
-        );
+        if (this.userStore.isAdmin) {
+          await this.newsStore.adminDeleteCommentForNews(
+            news,
+            comment.id,
+            this.userStore
+          );
+        }
+        else {
+          await this.newsStore.deleteCommentForNews(
+            news,
+            comment.id,
+            this.userStore
+          );
+        }
       } catch (error) {
         console.log("Не удалось удалить комментарий");
       }

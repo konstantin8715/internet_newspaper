@@ -9,6 +9,16 @@ export const useUserStore = defineStore("userStore", {
     roles: [],
   }),
 
+  getters: {
+    isUser() {
+      return this.roles.includes("ROLE_USER") || this.roles.includes("ROLE_ADMIN");
+    },
+
+    isAdmin() {
+      return this.roles.includes("ROLE_ADMIN");
+    },
+  },
+
   actions: {
     saveUser(id, name, surname, roles) {
       this.id = id;
@@ -51,16 +61,5 @@ export const useUserStore = defineStore("userStore", {
         this.$reset();
       }
     },
-
-    // async refreshToken() {
-    //   try {
-    //     const data = await userService.refreshToken();
-    //     localStorage.setItem("accessToken", data.accessToken);
-    //   } catch (error) {
-    //     user.deleteUserFromLocalStorage();
-    //     user.$reset();
-    //     throw error;
-    //   }
-    // },
   },
 });

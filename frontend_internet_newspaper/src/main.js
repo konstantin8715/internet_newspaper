@@ -6,5 +6,17 @@ import {
     createPinia
 } from 'pinia';
 
+import 'vuetify/styles'
+import {
+    createVuetify
+} from 'vuetify'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
+// import '@mdi/font/css/materialdesignicons.css'
 
-createApp(App).use(router).use(createPinia()).mount('#app')
+const vuetify = createVuetify({
+  components,
+  directives,
+});
+
+createApp(App).use(router).use(createPinia()).use(vuetify).mount('#app')

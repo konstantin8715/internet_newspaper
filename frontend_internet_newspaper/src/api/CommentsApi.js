@@ -37,4 +37,14 @@ export const commentsApi = {
       },
     });
   },
+
+  adminDeleteComment(commentId) {
+    return axios({
+      url: `http://localhost:8080/comment/admin/${commentId}`,
+      method: "delete",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+  },
 };

@@ -16,7 +16,7 @@ export const commentsService = {
         comment.datePublishedComment = new Date(comment.datePublishedComment);
         comments.push(comment);
       }
-      
+
       return comments;
     } catch (error) {
       throw error;
@@ -49,6 +49,19 @@ export const commentsService = {
       try {
         await userService.refreshToken(user);
         this.userDeleteComment(commentId, user);
+      } catch (error) {
+        throw error;
+      }
+    }
+  },
+
+  async adminDeleteComment(commentId, admin) {
+    try {
+      await commentsApi.adminDeleteComment(commentId);
+    } catch (error) {
+      try {
+        await userService.refreshToken(admin);
+        this.adminDeleteComment(commentId, admin);
       } catch (error) {
         throw error;
       }
