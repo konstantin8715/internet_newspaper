@@ -68,6 +68,15 @@ export const useNewsStore = defineStore("useNewsStore", {
       }
     },
 
+    async deleteNews(newsId, userStore) {
+      try {
+        await newsService.deleteNews(newsId, userStore);
+        this.news = this.news.filter(n => n.id != newsId);
+      } catch (error) {
+        throw error;
+      }
+    },
+
     async saveCommentForNews(news, textComment, userStore) {
       try {
         const newComment = await commentsService.saveComment(

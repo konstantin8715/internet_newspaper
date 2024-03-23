@@ -34,6 +34,10 @@
       </v-dialog>
       <!-- Изменение новости -->
 
+      <div v-if="this.userStore.isAdmin">
+        <button @click="deleteNews(n)">Удалить новость</button>
+      </div>
+
       <h3>
         {{ n.newsTitle }} <span style="color: red">id: {{ n.id }}</span>
       </h3>
@@ -126,12 +130,14 @@
       <v-card max-width="700" prepend-icon="mdi-update" title="Update news">
         <input v-model="this.createNewsTitle" />
         <textarea v-model="this.createNewsText" cols="100" rows="40"></textarea>
-        <input v-model="this.createNewsPictureUrl" placeholder="pictureUrl">
+        <input v-model="this.createNewsPictureUrl" placeholder="pictureUrl" />
         <template v-slot:actions>
           <v-btn class="ms-auto" @click="createNews()"
             >Подтвердить изменения</v-btn
           >
-          <v-btn class="ms-auto" @click="this.createNewsFlag = false">Отмена</v-btn>
+          <v-btn class="ms-auto" @click="this.createNewsFlag = false"
+            >Отмена</v-btn
+          >
         </template>
       </v-card>
     </v-dialog>
@@ -196,7 +202,6 @@ export default {
           this.comment,
           this.userStore
         );
-        // console.log(news.comments);
         this.comment = "";
       } catch (error) {
         console.log(
@@ -263,6 +268,14 @@ export default {
       } catch (error) {
         console.log(error);
         alert("Не удалось создать новость");
+      }
+    },
+
+    async deleteNews(news) {
+      try {
+        await this.newsStore.deleteNews(news.id, this.userStore);
+      } catch (error) {
+        alert("Не удалось удалить новость");
       }
     },
 

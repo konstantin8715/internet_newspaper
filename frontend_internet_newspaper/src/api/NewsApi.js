@@ -33,4 +33,14 @@ export const newsApi = {
       },
     });
   },
+
+  deleteNews(newsId) {
+    return axios({
+      url: `http://localhost:8080/news/${newsId}`,
+      method: "delete",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+  }
 };

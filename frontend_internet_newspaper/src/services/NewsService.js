@@ -37,7 +37,19 @@ export const newsService = {
       } catch (error) {
         throw error;
       }
-      throw error;
+    }
+  },
+
+  async deleteNews(newsId, admin) {
+    try {
+      await newsApi.deleteNews(newsId);
+    } catch (error) {
+      try {
+        await userService.refreshToken(admin);
+        this.deleteNews(newsId, admin);
+      } catch (error) {
+        throw error;
+      }
     }
   },
 };

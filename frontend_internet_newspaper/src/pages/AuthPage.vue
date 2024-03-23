@@ -23,8 +23,10 @@ export default {
   components: {},
   data() {
     return {
-      email: "aleksandrov@yandex.ru",
-      password: "Aleksandrov47",
+      // email: "aleksandrov@yandex.ru",
+      // password: "Aleksandrov47",
+      email: "kostya.ignatev.14@mail.ru",
+      password: "Kostyaik22",
       userStore: useUserStore(),
     };
   },
