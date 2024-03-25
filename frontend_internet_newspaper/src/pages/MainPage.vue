@@ -1,14 +1,8 @@
 <template>
-  <div v-if="this.userStore.isUser">
-    {{ this.userStore.name }}
-    {{ this.userStore.surname }}
-    <button @click="signOut">Выйти</button>
-  </div>
-  <div v-else>
-    <button @click="$router.push('login')">Войти</button>
-    <button @click="$router.push('signup')">Зарегистрироваться</button>
-  </div>
   <div class="container">
+
+    <main-header :user="this.userStore" @signOut="signOut"></main-header>
+
     <div
       class="news"
       v-for="n in this.newsStore.news"
@@ -146,13 +140,15 @@
 </template>
 
 <script>
+import MainHeader from "../components/MainHeader.vue";
+
 import { likesService } from "../services/LikesService";
 import { userService } from "../services/UserService";
 import { useUserStore } from "../stores/UserStore";
 import { useNewsStore } from "../stores/NewsStore";
 
 export default {
-  components: {},
+  components: {MainHeader},
   data() {
     return {
       userStore: useUserStore(),
@@ -311,5 +307,11 @@ export default {
 };
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+@import "../colors";
+
+.main-block {
+  background: $light-primary;
+}
+</style>
 ../services/LikesService
