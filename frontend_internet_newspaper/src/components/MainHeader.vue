@@ -2,39 +2,46 @@
   <div class="main-block">
     <div class="content-container d-flex justify-space-between align-center">
       <span class="logo text-uppercase">Новости</span>
-      <div v-if="user.isUser">
-        <svg-icon type="mdi" :path="path"></svg-icon>
+      <div v-if="this.userStore.isUser">
         <span class="profile-text mr-6"
-          >{{ user.name }} {{ user.surname }}</span
-        >
-        <v-btn class="btn" @click="$emit('signOut')">
-          Выйти
-          <template v-slot:append>
-            <v-icon icon="mdi-chevron-right"></v-icon>
-          </template>
-        </v-btn>
+          >{{ this.userStore.name }} {{ this.userStore.surname }}
+        </span>
+        <app-button @click="signOut"> Выйти </app-button>
       </div>
       <div v-else>
-        <v-btn class="btn mr-2" @click="$router.push('login')">Войти</v-btn>
-        <v-btn class="btn" @click="$router.push('signup')"
-          >Зарегистрироваться</v-btn
-        >
+        <app-button class="mr-2" @click="$router.push('login')">
+          Войти
+        </app-button>
+        <app-button @click="$router.push('signup')">Регистрация</app-button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { useUserStore } from "../stores/UserStore";
+import AppButton from "./UI/AppButton.vue";
+
 export default {
   name: "main-header",
-  props: {
-    user: {
-      type: Object,
-      requiered: true,
-    },
+
+  components: { AppButton },
+
+  data() {
+    return {
+      userStore: useUserStore(),
+    };
   },
 
-  emits: ["signOut"],
+  methods: {
+    async signOut() {
+      try {
+        await this.userStore.signOut();
+      } catch (error) {
+        alert("Не удалось выйти");
+      }
+    },
+  },
 };
 </script>
 
@@ -51,12 +58,6 @@ export default {
 .logo {
   font-size: $logo;
   font-weight: 700;
-}
-
-.btn {
-  background: $text;
-  color: $dark-text;
-  font-size: $small-text;
 }
 
 .profile-text {

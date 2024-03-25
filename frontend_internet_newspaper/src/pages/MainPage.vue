@@ -1,16 +1,9 @@
 <template>
   <div class="container">
+    <main-header />
 
-    <main-header :user="this.userStore" @signOut="signOut"></main-header>
-
-    <div
-      class="news"
-      v-for="n in this.newsStore.news"
-      :key="n.id"
-      style="border: solid red; margin-top: 20px; padding: 25px"
-    >
-      <!-- Изменение новости -->
-      <v-btn v-if="this.userStore.isAdmin" @click="openDialog(n)"
+    <!-- Изменение новости -->
+    <!-- <v-btn v-if="this.userStore.isAdmin" @click="openDialog(n)"
         >Изменить новость</v-btn
       >
 
@@ -25,122 +18,42 @@
             <v-btn class="ms-auto" @click="n.change = false">Отмена</v-btn>
           </template>
         </v-card>
-      </v-dialog>
-      <!-- Изменение новости -->
+      </v-dialog> -->
+    <!-- Изменение новости -->
 
-      <div v-if="this.userStore.isAdmin">
+    <!-- <div v-if="this.userStore.isAdmin">
         <button @click="deleteNews(n)">Удалить новость</button>
-      </div>
+      </div> -->
 
-      <h3>
-        {{ n.newsTitle }} <span style="color: red">id: {{ n.id }}</span>
-      </h3>
-      <div>{{ n.newsText }}</div>
-      <img width="500px" length="250px" :src="n.picture.url" /><br />
-      <button @click="likeNews(n)">
-        Количество лайков: {{ n.likes.length }}</button
-      ><br />
+    <news-list />
 
-      <button
-        v-if="!n.showComments"
-        @click="n.isCommentsLoaded ? (n.showComments = true) : loadComments(n)"
-        style="display: block; margin-top: 15px; margin: 0 auto"
-      >
-        Показать комметарии
-      </button>
-
-      <button
-        v-if="n.showComments"
-        @click="n.showComments = false"
-        style="display: block; margin-top: 15px; margin: 0 auto"
-      >
-        Скрыть комментарии
-      </button>
-
-      <div
-        style="
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          margin: 0 auto;
-          padding: 15px;
-          margin-top: 20px;
-          border: 2px solid white;
-          width: 70%;
-        "
-        v-if="n.showComments"
-      >
-        <button
-          style="display: block; margin-top: 15px"
-          v-if="n.comments.length < n.countOfComments"
-          @click="loadComments(n)"
-        >
-          Показать предыдущие комментарии
-        </button>
-
-        <div
-          style="
-            display: flex;
-            border: 2px solid white;
-            margin-top: 15px;
-            width: 100%;
-          "
-          v-for="c in sortedComments(n)"
-        >
-          <div style="width: 100%">
-            {{ c.textComment }}
-          </div>
-          <button
-            v-if="c.user.id == this.userStore.id || this.userStore.isAdmin"
-            @click="deleteComment(n, c)"
-          >
-            Удалить
-          </button>
-        </div>
-
-        <textarea
-          v-model="comment"
-          style="margin-top: 15px"
-          placeholder="Введите комментарий"
-          cols="40"
-          rows="5"
-          v-if="this.userStore.isUser && this.userStore.roles"
-        ></textarea>
-        <button
-          style="display: block; margin-top: 15px"
-          @click="saveCommentForNews(n)"
-          v-if="this.userStore.isUser && this.comment"
-        >
-          Отправить
-        </button>
-      </div>
-    </div>
     <!-- Добавление новости -->
-    <v-btn v-if="this.userStore.isAdmin" @click="this.createNewsFlag = true"
-      >Добавить новость</v-btn
-    >
-
-    <v-dialog v-model="this.createNewsFlag" width="auto">
-      <v-card max-width="700" prepend-icon="mdi-update" title="Update news">
-        <input v-model="this.createNewsTitle" />
-        <textarea v-model="this.createNewsText" cols="100" rows="40"></textarea>
-        <input v-model="this.createNewsPictureUrl" placeholder="pictureUrl" />
-        <template v-slot:actions>
-          <v-btn class="ms-auto" @click="createNews()"
-            >Подтвердить изменения</v-btn
-          >
-          <v-btn class="ms-auto" @click="this.createNewsFlag = false"
-            >Отмена</v-btn
-          >
-        </template>
-      </v-card>
-    </v-dialog>
+    <!-- <v-btn v-if="this.userStore.isAdmin" @click="this.createNewsFlag = true"
+        >Добавить новость</v-btn
+      >
+  
+      <v-dialog v-model="this.createNewsFlag" width="auto">
+        <v-card max-width="700" prepend-icon="mdi-update" title="Update news">
+          <input v-model="this.createNewsTitle" />
+          <textarea v-model="this.createNewsText" cols="100" rows="40"></textarea>
+          <input v-model="this.createNewsPictureUrl" placeholder="pictureUrl" />
+          <template v-slot:actions>
+            <v-btn class="ms-auto" @click="createNews()"
+              >Подтвердить изменения</v-btn
+            >
+            <v-btn class="ms-auto" @click="this.createNewsFlag = false"
+              >Отмена</v-btn
+            >
+          </template>
+        </v-card>
+      </v-dialog> -->
     <!-- Добавление новости -->
   </div>
 </template>
 
 <script>
 import MainHeader from "../components/MainHeader.vue";
+import NewsList from "../components/NewsList.vue";
 
 import { likesService } from "../services/LikesService";
 import { userService } from "../services/UserService";
@@ -148,7 +61,7 @@ import { useUserStore } from "../stores/UserStore";
 import { useNewsStore } from "../stores/NewsStore";
 
 export default {
-  components: {MainHeader},
+  components: { MainHeader, NewsList },
   data() {
     return {
       userStore: useUserStore(),
@@ -314,4 +227,4 @@ export default {
   background: $light-primary;
 }
 </style>
-../services/LikesService
+../services/LikesService../modules/MainHeader.vue../components/MainHeader.vue
