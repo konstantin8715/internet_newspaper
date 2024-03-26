@@ -222,9 +222,5 @@ export default {
 
 <style scoped lang="scss">
 @import "../colors";
-
-.main-block {
-  background: $light-primary;
-}
 </style>
 ../services/LikesService../modules/MainHeader.vue../components/MainHeader.vue

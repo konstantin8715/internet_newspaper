@@ -1,15 +1,24 @@
 <template>
-  <div>
-    <h3>
-      {{ post.newsTitle }} <span style="color: red">id: {{ post.id }}</span>
-    </h3>
-    <div>{{ post.newsText }}</div>
-    <img width="500px" length="250px" :src="post.picture.url" /><br />
-    <app-button @click="likeNews"
-      >Количество лайков: {{ post.likes.length }}</app-button
-    ><br />
+  <div class="content-container">
+    <h1 class="post-title">{{ post.newsTitle }}</h1>
+    <div class="post-text mt-4">
+      {{ post.newsText }}
+    </div>
 
-    <comments-list :post="post" />
+    <img class="post-img d-block mt-4 mx-auto" :src="post.picture.url" />
+
+    <div class="post-actions d-flex mt-4">
+      <v-btn class="post-like w-20" @click="likeNews">
+        <v-icon v-if="!this.userStore.isUser" icon="mdi-heart-remove-outline" />
+        <v-icon
+          v-else-if="this.isCurrentUserLikedPost"
+          icon="mdi-heart"
+        />
+        <v-icon v-else icon="mdi-heart-outline" />
+        {{ post.likes.length }}
+      </v-btn>
+      <comments-list class="ml-4" :post="post" />
+    </div>
   </div>
 </template>
 
@@ -37,6 +46,12 @@ export default {
     };
   },
 
+  computed: {
+    isCurrentUserLikedPost() {
+      return this.post.likes.find((like) => like.user.id == this.userStore.id);
+    },
+  },
+
   methods: {
     async likeNews() {
       try {
@@ -52,4 +67,26 @@ export default {
 };
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+@import "../font";
+@import "../colors";
+
+.post-title {
+  font-size: $title-text;
+  color: $text;
+}
+
+.post-text {
+  font-size: $medium-text;
+}
+
+.post-img {
+  max-width: 100%;
+}
+
+.post-like {
+  background: $text;
+  color: $dark-text;
+  font-size: $small-text;
+}
+</style>

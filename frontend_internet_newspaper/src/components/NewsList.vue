@@ -1,9 +1,8 @@
 <template>
   <div
-    class="news"
+    class="post"
     v-for="post in this.newsStore.news"
     :key="post.id"
-    style="border: solid red; margin-top: 20px; padding: 25px"
   >
     <news-item :post="post" />
   </div>
@@ -26,4 +25,16 @@ export default {
 };
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+@import "../colors";
+@import "../font";
+
+.post {
+  background: $dark-primary;
+  color: $text;
+  width: 100%;
+  margin-top: 20px;
+  padding: 20px 0;
+  border-radius: 5px;
+}
+</style>

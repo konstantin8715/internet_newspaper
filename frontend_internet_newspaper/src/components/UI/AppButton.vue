@@ -13,8 +13,6 @@ export default {
       requiered: true,
     },
   },
-
-  emits: ["emit1"],
 };
 </script>
 

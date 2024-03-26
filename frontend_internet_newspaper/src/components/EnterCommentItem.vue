@@ -2,11 +2,12 @@
   <div>
     <textarea
       :value="comment"
+      @input="$emit('update:comment', $event.target.value)"
       style="margin-top: 15px"
       placeholder="Введите комментарий"
       cols="40"
       rows="5"
-      v-if="this.userStore.isUser && this.userStore.roles"
+      v-if="this.userStore.isUser"
     ></textarea>
     <app-button
       style="display: block; margin-top: 15px"
@@ -40,7 +41,7 @@ export default {
     };
   },
 
-  emits: ["emit1"],
+  emits: ["enterComment", "update:comment"],
 };
 </script>
 

@@ -1,9 +1,9 @@
 <template>
-  <div class="main-block">
+  <div class="header">
     <div class="content-container d-flex justify-space-between align-center">
-      <span class="logo text-uppercase">Новости</span>
+      <span class="header-logo text-uppercase">Новости</span>
       <div v-if="this.userStore.isUser">
-        <span class="profile-text mr-6"
+        <span class="header-profile mr-6"
           >{{ this.userStore.name }} {{ this.userStore.surname }}
         </span>
         <app-button @click="signOut"> Выйти </app-button>
@@ -49,18 +49,18 @@ export default {
 @import "../colors";
 @import "../font";
 
-.main-block {
-  background: $primary;
+.header {
+  background: $light-primary;
   height: 50px;
   border-radius: 5px;
 }
 
-.logo {
+.header-logo {
   font-size: $logo;
   font-weight: 700;
 }
 
-.profile-text {
+.header-profile {
   color: $dark-text;
   font-size: $large-text;
 }

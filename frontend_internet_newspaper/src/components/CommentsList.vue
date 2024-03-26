@@ -7,15 +7,15 @@
       "
       style="display: block; margin-top: 15px; margin: 0 auto"
     >
-      Показать комметарии
+      <v-icon icon="mdi-comment" />
     </app-button>
 
     <app-button
       v-if="post.showComments"
       @click="post.showComments = false"
-      style="display: block; margin-top: 15px; margin: 0 auto"
+      style="display: block;"
     >
-      Скрыть комментарии
+      <v-icon icon="mdi-comment-minus" />
     </app-button>
 
     <div
@@ -52,9 +52,11 @@
       </div>
 
       <enter-comment-item
-        :comment="this.comment"
+        v-model:comment="this.comment"
         @enterComment="this.saveComment"
       />
+
+      {{ this.comment }}
     </div>
   </div>
 </template>
@@ -98,13 +100,15 @@ export default {
 
     async saveComment() {
       try {
+        console.log(this.comment);
         await this.newsStore.saveCommentForNews(
-          post,
+          this.post,
           this.comment,
           this.userStore
         );
         this.comment = "";
       } catch (error) {
+        console.log(error);
         console.log(
           "Пользователь не авторизован, либо срок действия токенов истек"
         );
@@ -114,19 +118,20 @@ export default {
     async deleteComment(comment) {
       try {
         if (this.userStore.isAdmin) {
-          await this.newsStore.adminDeleteCommentForpost(
-            post,
+          await this.newsStore.adminDeleteCommentForNews(
+            this.post,
             comment.id,
-            this.userStore
+            this.userStore,
           );
         } else {
-          await this.newsStore.deleteCommentForpost(
-            post,
+          await this.newsStore.deleteCommentForNews(
+            this.post,
             comment.id,
-            this.userStore
+            this.userStore,
           );
         }
       } catch (error) {
+        console.log(error);
         console.log("Не удалось удалить комментарий");
       }
     },
