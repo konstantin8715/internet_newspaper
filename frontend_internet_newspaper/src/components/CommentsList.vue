@@ -1,63 +1,29 @@
 <template>
-  <div>
-    <app-button
-      v-if="!post.showComments"
-      @click="
-        post.isCommentsLoaded ? (post.showComments = true) : loadComments(post)
-      "
-      style="display: block; margin-top: 15px; margin: 0 auto"
+  <div сlass="d-flex flex-column" v-if="post.showComments">
+    <span
+      class="cursor-pointer text-decoration-underline"
+      v-if="post.comments.length < post.countOfComments"
+      @click="loadComments(post)"
     >
-      <v-icon icon="mdi-comment" />
-    </app-button>
+      Показать предыдущие комментарии
+    </span>
 
-    <app-button
-      v-if="post.showComments"
-      @click="post.showComments = false"
-      style="display: block;"
-    >
-      <v-icon icon="mdi-comment-minus" />
-    </app-button>
-
-    <div
-      style="
+    <!-- style="
         display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin: 0 auto;
-        padding: 15px;
-        margin-top: 20px;
         border: 2px solid white;
-        width: 70%;
-      "
-      v-if="post.showComments"
-    >
-      <app-button
-        style="display: block; margin-top: 15px"
-        v-if="post.comments.length < post.countOfComments"
-        @click="loadComments(post)"
-      >
-        Показать предыдущие комментарии
-      </app-button>
-
-      <div
-        style="
-          display: flex;
-          border: 2px solid white;
-          margin-top: 15px;
-          width: 100%;
-        "
-        v-for="comment in sortedComments(post)"
-      >
-        <comment-item :comment="comment" @deleteComment="this.deleteComment" />
-      </div>
-
-      <enter-comment-item
-        v-model:comment="this.comment"
-        @enterComment="this.saveComment"
-      />
-
-      {{ this.comment }}
+        margin-top: 15px;
+        width: 100%;
+      " -->
+    <div v-for="comment in sortedComments(post)">
+      <comment-item :comment="comment" @deleteComment="this.deleteComment" />
     </div>
+
+    <enter-comment-item
+      v-model:comment="this.comment"
+      @enterComment="this.saveComment"
+    />
+
+    {{ this.comment }}
   </div>
 </template>
 
@@ -69,7 +35,7 @@ import CommentItem from "./CommentItem.vue";
 import EnterCommentItem from "./EnterCommentItem.vue";
 
 export default {
-  name: 'comment-list',
+  name: "comment-list",
 
   components: { AppButton, CommentItem, EnterCommentItem },
 
@@ -121,13 +87,13 @@ export default {
           await this.newsStore.adminDeleteCommentForNews(
             this.post,
             comment.id,
-            this.userStore,
+            this.userStore
           );
         } else {
           await this.newsStore.deleteCommentForNews(
             this.post,
             comment.id,
-            this.userStore,
+            this.userStore
           );
         }
       } catch (error) {

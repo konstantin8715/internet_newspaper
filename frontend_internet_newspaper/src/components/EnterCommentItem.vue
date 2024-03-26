@@ -1,6 +1,15 @@
 <template>
-  <div>
-    <textarea
+  <div class="mt-6">
+    <v-textarea
+      class="enter-comment-field"
+      :value="comment"
+      @input="$emit('update:comment', $event.target.value)"
+      placeholder="Введите комментарий"
+      v-if="this.userStore.isUser"
+      label="Комментарий"
+      counter
+    ></v-textarea>
+    <!-- <textarea
       :value="comment"
       @input="$emit('update:comment', $event.target.value)"
       style="margin-top: 15px"
@@ -8,7 +17,7 @@
       cols="40"
       rows="5"
       v-if="this.userStore.isUser"
-    ></textarea>
+    ></textarea> -->
     <app-button
       style="display: block; margin-top: 15px"
       @click="$emit('enterComment')"
@@ -45,4 +54,11 @@ export default {
 };
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+@import "../font";
+@import "../colors";
+
+.enter-comment-field {
+  background: $dark-primary;
+}
+</style>

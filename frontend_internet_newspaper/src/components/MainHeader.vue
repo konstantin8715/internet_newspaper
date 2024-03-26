@@ -51,7 +51,7 @@ export default {
 
 .header {
   background: $light-primary;
-  height: 50px;
+  height: 65px;
   border-radius: 5px;
 }
 

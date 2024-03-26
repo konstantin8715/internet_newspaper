@@ -34,7 +34,7 @@ export default {
   color: $text;
   width: 100%;
   margin-top: 20px;
-  padding: 20px 0;
+  padding: 30px 0;
   border-radius: 5px;
 }
 </style>
