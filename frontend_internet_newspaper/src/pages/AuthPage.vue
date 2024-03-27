@@ -1,7 +1,6 @@
 <template>
   <div class="container">
     <div class="auth-block mx-auto pa-8">
-      <!-- TODO: Сделать валидацию -->
       <div class="d-flex flex-column">
         <span>Email:</span>
         <app-input
@@ -33,11 +32,23 @@
 
       <app-button
         class="mt-6"
-        :disabled="!this.isValidEmail && !this.isValidPassword"
+        :disabled="!this.isValidEmail || !this.isValidPassword"
         @click="signIn"
       >
         Войти
       </app-button>
+
+      <div class="d-flex justify-center mt-1">
+        <span>
+          Нет аккаунта?
+          <span
+            class="auth-route text-decoration-underline cursor-pointer"
+            @click="$router.push('signup')"
+          >
+            Зарегистрироваться
+          </span>
+        </span>
+      </div>
     </div>
   </div>
 </template>
@@ -50,8 +61,6 @@ export default {
   components: {},
   data() {
     return {
-      // email: "aleksandrov@yandex.ru",
-      // password: "Aleksandrov47",
       email: "",
       password: "",
       isEmailChanged: false,
@@ -122,5 +131,9 @@ export default {
 
 .auth-input {
   height: 35px;
+}
+
+.auth-route {
+  color: $light-primary;
 }
 </style>
