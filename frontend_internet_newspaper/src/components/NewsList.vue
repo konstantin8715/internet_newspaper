@@ -1,10 +1,13 @@
 <template>
-  <div
+  <div v-if="this.newsStore.hasNews"
     class="post"
     v-for="post in this.newsStore.news"
     :key="post.id"
   >
     <news-item :post="post" />
+  </div>
+  <div v-else class="d-flex justify-center align-center mt-16">
+    <span class="no-news-banner">Нет актуальных новостей</span>
   </div>
 </template>
 
@@ -36,5 +39,10 @@ export default {
   margin-top: 20px;
   padding: 30px 0;
   border-radius: 5px;
+}
+
+.no-news-banner {
+  font-size: $banner-text;
+  color: $dark-primary;
 }
 </style>

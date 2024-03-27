@@ -79,5 +79,6 @@ export default {
 
 .comment-data-text {
   word-wrap: break-word;
+  white-space: pre-line;
 }
 </style>

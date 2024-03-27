@@ -18,12 +18,25 @@
       <comment-item :comment="comment" @deleteComment="this.deleteComment" />
     </div>
 
-    <enter-comment-item
+    <!-- <enter-comment-item
       v-model:comment="this.comment"
       @enterComment="this.saveComment"
-    />
+    /> -->
 
-    {{ this.comment }}
+    <app-textarea
+      class="mt-6 h-10"
+      v-model:value="this.comment"
+      placeholder="Введите комментарий"
+      v-if="this.userStore.isUser"
+    />
+    <span v-if="this.comment.length > 1000">Слишком большой комментарий</span>
+    <app-button
+      style="display: block; margin-top: 15px"
+      @click="this.saveComment"
+      v-if="this.userStore.isUser && this.isCommentCorrect"
+    >
+      Отправить
+    </app-button>
   </div>
 </template>
 
@@ -32,12 +45,11 @@ import { useUserStore } from "../stores/UserStore";
 import { useNewsStore } from "../stores/NewsStore";
 import AppButton from "./UI/AppButton.vue";
 import CommentItem from "./CommentItem.vue";
-import EnterCommentItem from "./EnterCommentItem.vue";
 
 export default {
   name: "comment-list",
 
-  components: { AppButton, CommentItem, EnterCommentItem },
+  components: { AppButton, CommentItem },
 
   props: {
     post: {
@@ -52,6 +64,16 @@ export default {
       newsStore: useNewsStore(),
       comment: "",
     };
+  },
+
+  computed: {
+    isCommentCorrect() {
+      return (
+        this.comment.length > 0 &&
+        this.comment.length <= 1000 &&
+        this.comment.replace(/\s+/g, "").length > 0
+      );
+    },
   },
 
   methods: {
