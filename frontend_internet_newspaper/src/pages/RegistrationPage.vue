@@ -1,34 +1,70 @@
 <template>
-  <!-- TODO: Сделать валидацию -->
-  <input
-    style="width: 500px; height: 100px; font-size: 32px"
-    v-model="name"
-    type="text"
-    placeholder="Введите имя"
-  />
-  <input
-    style="width: 500px; height: 100px; display: block; font-size: 32px"
-    v-model="surname"
-    type="text"
-    placeholder="Введите фамилию"
-  />
-  <input
-    style="width: 500px; height: 100px; font-size: 32px"
-    v-model="email"
-    type="text"
-    placeholder="Введите email"
-  />
-  <input
-    style="width: 500px; height: 100px; display: block; font-size: 32px"
-    v-model="password"
-    type="text"
-    placeholder="Введите пароль"
-  />
-  <div v-if="showErrorMessage">
-    Ошибка при отправке запроса на сервер или пользователь с данной почтой уже
-    сущестует. Попробуйте еще раз.
+  <div class="container">
+    <div class="registration-block mx-auto pa-8">
+      <div class="d-flex flex-column">
+        <span>Имя:</span>
+        <app-input
+          class="auth-input mt-1"
+          v-model:value="this.email"
+          type="text"
+          placeholder="Введите имя"
+        />
+        <app-warning-text v-if="!this.isValidEmail && this.isEmailChanged">
+          Некорректный email
+        </app-warning-text>
+      </div>
+
+      <div class="d-flex flex-column mt-4">
+        <span>Фамилия:</span>
+        <app-input
+          class="auth-input mt-1"
+          v-model:value="this.email"
+          type="text"
+          placeholder="Введите фамилию"
+        />
+        <app-warning-text v-if="!this.isValidEmail && this.isEmailChanged">
+          Некорректный email
+        </app-warning-text>
+      </div>
+
+      <div class="d-flex flex-column mt-4">
+        <span>Email:</span>
+        <app-input
+          class="auth-input mt-1"
+          v-model:value="this.email"
+          type="text"
+          placeholder="Введите email"
+        />
+        <app-warning-text v-if="!this.isValidEmail && this.isEmailChanged">
+          Некорректный email
+        </app-warning-text>
+      </div>
+
+      <div class="d-flex flex-column mt-4">
+        <span>Пароль:</span>
+        <app-input
+          class="auth-input mt-1"
+          v-model:value="this.password"
+          type="password"
+          placeholder="Введите пароль"
+        />
+        <app-warning-text
+          v-if="!this.isValidPassword && this.isPasswordChanged"
+        >
+          Пароль должен содержать не менее 8 символов, включая прописные и
+          строчные буквы, «+», а также хотя бы одну цифру от 0 до 9.
+        </app-warning-text>
+      </div>
+
+      <app-button
+        class="mt-6"
+        :disabled="!this.isValidEmail && !this.isValidPassword"
+        @click="signIn"
+      >
+        Войти
+      </app-button>
+    </div>
   </div>
-  <button style="margin-top: 15px" @click="signup">Зарегистрироваться</button>
 </template>
 
 <script>
@@ -42,6 +78,10 @@ export default {
       surname: "",
       email: "",
       password: "",
+      isNameChanged: false,
+      isSurnameChanged: false,
+      isEmailChanged: false,
+      isPasswordChanged: false,
       showErrorMessage: false,
     };
   },
@@ -49,9 +89,14 @@ export default {
   methods: {
     async signup() {
       try {
-        await userService.signUp(this.name, this.surname, this.email, this.password);
-        this.$router.push('login')
-        alert('Вы успешно зарегистрировались. Авторизуйтесь.');
+        await userService.signUp(
+          this.name,
+          this.surname,
+          this.email,
+          this.password
+        );
+        this.$router.push("login");
+        alert("Вы успешно зарегистрировались. Авторизуйтесь.");
       } catch (error) {
         this.showErrorMessage = true;
       }
@@ -69,4 +114,18 @@ export default {
 };
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+@import "../colors";
+@import "../font";
+
+.registration-block {
+  width: 70%;
+  height: 50%;
+  margin-top: 70px;
+  background: $dark-primary;
+  display: flex;
+  flex-direction: column;
+  color: $text;
+  border-radius: 5px;
+}
+</style>

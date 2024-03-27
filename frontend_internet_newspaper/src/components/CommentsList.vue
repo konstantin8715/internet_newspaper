@@ -31,7 +31,7 @@
     />
     <span v-if="this.comment.length > 1000">Слишком большой комментарий</span>
     <app-button
-      style="display: block; margin-top: 15px"
+      class="mt-2"
       @click="this.saveComment"
       v-if="this.userStore.isUser && this.isCommentCorrect"
     >
