@@ -1,5 +1,13 @@
 <template>
   <div class="content-container">
+    <app-dialog
+      :title="post.newsTitle"
+      :text="post.newsText"
+      :pictureUrl="post.picture.url"
+      :enterText="'Изменить новость'"
+      @enterDialog="updateNews"
+    />
+
     <h1 class="post-title">{{ post.newsTitle }}</h1>
     <div class="post-text mt-4">
       {{ post.newsText }}
@@ -87,6 +95,19 @@ export default {
       }
     },
 
+    async updateNews(title, text, pictureUrl) {
+      try {
+        this.post.newsTitle = title;
+        this.post.newsText = text;
+        this.post.picture.url = pictureUrl;
+        await this.newsStore.updateNews(news, this.userStore);
+        news.change = false;
+      } catch (error) {
+        console.log(error);
+        alert("Не удалось обновить новость");
+      }
+    },
+
     async loadComments() {
       try {
         await this.newsStore.loadCommentsForNews(this.post);
@@ -94,6 +115,12 @@ export default {
         console.log(error);
         alert("Не удалось загрузить комментарии");
       }
+    },
+
+    openDialog(news) {
+      news.change = true;
+      this.updateTitle = news.newsTitle;
+      this.updateText = news.newsText;
     },
   },
 };

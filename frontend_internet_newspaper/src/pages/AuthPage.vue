@@ -1,34 +1,26 @@
 <template>
   <div class="container">
     <div class="auth-block mx-auto pa-8">
-      <div class="d-flex flex-column">
-        <span>Email:</span>
-        <app-input
-          class="auth-input mt-1"
-          v-model:value="this.email"
-          type="text"
-          placeholder="Введите email"
-        />
-        <app-warning-text v-if="!this.isValidEmail && this.isEmailChanged">
-          Некорректный email
-        </app-warning-text>
-      </div>
+      <form-field
+        :title="'Email:'"
+        :type="'text'"
+        :placeholderText="'Введите email'"
+        :validator="this.emailValidator"
+        :warningText="'Некорректный email'"
+        @updateField="this.isValidEmail = $event"
+        @enterField="this.email = $event"
+      />
 
-      <div class="d-flex flex-column mt-4">
-        <span>Пароль:</span>
-        <app-input
-          class="auth-input mt-1"
-          v-model:value="this.password"
-          type="password"
-          placeholder="Введите пароль"
-        />
-        <app-warning-text
-          v-if="!this.isValidPassword && this.isPasswordChanged"
-        >
-          Пароль должен содержать не менее 8 символов, включая прописные и
-          строчные буквы, «+», а также хотя бы одну цифру от 0 до 9.
-        </app-warning-text>
-      </div>
+      <form-field
+        class="mt-2"
+        :title="'Пароль:'"
+        :type="'password'"
+        :placeholderText="'Введите пароль'"
+        :validator="this.passwordValidator"
+        :warningText="'Пароль должен содержать не менее 8 символов, включая прописные и строчные буквы, «+», а также хотя бы одну цифру от 0 до 9.'"
+        @updateField="this.isValidPassword = $event"
+        @enterField="this.password = $event"
+      />
 
       <app-button
         class="mt-6"
@@ -56,49 +48,26 @@
 <script>
 import { useUserStore } from "../stores/UserStore";
 import { userService } from "../services/UserService";
+import FormField from "../components/FormField.vue";
+import { validateEmail } from "../helpers/EmailValidator";
+import { validatePassword } from "../helpers/PasswordValidator";
 
 export default {
-  components: {},
+  components: { FormField },
   data() {
     return {
+      // email: "aleksandrov@yandex.ru",
+      // password: "Aleksandrov47",
       email: "",
       password: "",
-      isEmailChanged: false,
-      isPasswordChanged: false,
+      emailValidator: validateEmail,
+      passwordValidator: validatePassword,
+      isValidEmail: false,
+      isValidPassword: false,
+      // isEmailChanged: false,
+      // isPasswordChanged: false,
       userStore: useUserStore(),
     };
-  },
-
-  computed: {
-    isValidEmail() {
-      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return emailPattern.test(this.email);
-    },
-
-    isValidPassword() {
-      const passwordPattern = /^(?=.*[0-9])(?=.*[a-zA-Z]).{8,}$/;
-      return passwordPattern.test(this.password);
-    },
-  },
-
-  watch: {
-    email() {
-      if (this.email.length == 0) {
-        this.isEmailChanged = false;
-      }
-      else {
-        this.isEmailChanged = true;
-      }
-    },
-
-    password() {
-      if (this.password.length == 0) {
-        this.isPasswordChanged = false;
-      }
-      else {
-        this.isPasswordChanged = true;
-      }
-    }
   },
 
   methods: {
