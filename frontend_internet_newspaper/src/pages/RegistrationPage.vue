@@ -44,62 +44,18 @@
         @enterField="this.password = $event"
       />
 
-      <!-- <span>Имя:</span>
-        <app-input
-          class="auth-input mt-1"
-          v-model:value="this.name"
-          type="text"
-          placeholder="Введите имя"
-        />
-        <app-warning-text v-if="!this.isValidName && this.isNameChanged">
-          Имя должно иметь длину минимум 2 символа
-        </app-warning-text>
-      </div>
+      <form-confirmed-button
+        :isValidName="this.isValidName"
+        :isValidSurname="this.isValidSurname"
+        :isValidEmail="this.isValidEmail"
+        :isValidPassword="this.isValidPassword"
+        :text="'Зарегистрироваться'"
+        :warningText="'Пользователь с таким email уже существует'"
+        :showErrorMessage="this.showErrorMessage"
+        @confirm="signup"
+      />
 
-      <div class="d-flex flex-column mt-4">
-        <span>Фамилия:</span>
-        <app-input
-          class="auth-input mt-1"
-          v-model:value="this.surname"
-          type="text"
-          placeholder="Введите фамилию"
-        />
-        <app-warning-text v-if="!this.isValidSurname && this.isSurnameChanged">
-          Фамилия должна иметь длину минимум 2 символа
-        </app-warning-text>
-      </div>
-
-      <div class="d-flex flex-column mt-4">
-        <span>Email:</span>
-        <app-input
-          class="auth-input mt-1"
-          v-model:value="this.email"
-          type="text"
-          placeholder="Введите email"
-          @focus="this.showErrorMessage = false"
-        />
-        <app-warning-text v-if="!this.isValidEmail && this.isEmailChanged">
-          Некорректный email
-        </app-warning-text>
-      </div>
-
-      <div class="d-flex flex-column mt-4">
-        <span>Пароль:</span>
-        <app-input
-          class="auth-input mt-1"
-          v-model:value="this.password"
-          type="password"
-          placeholder="Введите пароль"
-        />
-        <app-warning-text
-          v-if="!this.isValidPassword && this.isPasswordChanged"
-        >
-          Пароль должен содержать не менее 8 символов, включая прописные и
-          строчные буквы, «+», а также хотя бы одну цифру от 0 до 9
-        </app-warning-text>
-      </div> -->
-
-      <app-button
+      <!-- <app-button
         class="mt-6"
         :disabled="
           !this.isValidEmail ||
@@ -113,7 +69,7 @@
       </app-button>
       <app-warning-text v-if="this.showErrorMessage">
         Пользователь с таким email уже существует
-      </app-warning-text>
+      </app-warning-text> -->
 
       <div class="d-flex justify-center mt-1">
         <span>
@@ -136,9 +92,10 @@ import { validateText } from "../helpers/TextValidator";
 import { validateEmail } from "../helpers/EmailValidator";
 import { validatePassword } from "../helpers/PasswordValidator";
 import FormField from "../components/FormField.vue";
+import FormConfirmedButton from "../components/FormConfirmButton.vue";
 
 export default {
-  components: { FormField },
+  components: { FormField, FormConfirmedButton },
   data() {
     return {
       name: "",

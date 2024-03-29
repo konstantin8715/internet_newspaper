@@ -1,0 +1,96 @@
+<template>
+  <div class="d-flex flex-column">
+    <app-button
+      class="mt-6"
+      :disabled="isValid"
+      @click="$emit('confirm')"
+    >
+      {{ text }}
+    </app-button>
+    <app-warning-text v-if="showErrorMessage">
+      {{ warningText }}
+    </app-warning-text>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "form-confirm-button",
+  props: {
+    isValidName: {
+      type: String,
+      requiered: false,
+    },
+
+    isValidSurname: {
+      type: String,
+      requiered: false,
+    },
+
+    isValidEmail: {
+      type: String,
+      requiered: true,
+    },
+
+    isValidPassword: {
+      type: String,
+      requiered: true,
+    },
+
+    text: {
+      type: String,
+      requiered: true,
+    },
+
+    warningText: {
+      type: String,
+      requiered: true,
+    },
+
+    showErrorMessage: {
+      type: Boolean,
+      requiered: true,
+    },
+  },
+
+  computed: {
+    isValid() {
+      if (this.isValidName == undefined && this.isValidSurname == undefined) {
+        return !this.isValidEmail || !this.isValidPassword;
+      } else {
+        return (
+          !this.isValidEmail ||
+          !this.isValidPassword ||
+          !this.isValidName ||
+          !this.isValidSurname
+        );
+      }
+    },
+  },
+
+  emits: ["confirm"],
+};
+</script>
+
+<style scoped lang="scss">
+@import "../font";
+@import "../colors";
+
+.comment {
+  border-bottom: 1px solid $light-primary;
+  color: $text;
+  font-size: $medium-text;
+}
+
+.comment-author,
+.comment-date,
+.comment-delete {
+  color: $light-primary;
+  font-size: $small-text;
+}
+
+.comment-data-text {
+  word-wrap: break-word;
+  white-space: pre-line;
+}
+</style>
