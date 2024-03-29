@@ -1,8 +1,50 @@
 <template>
   <div class="container">
     <div class="registration-block mx-auto pa-8">
-      <div class="d-flex flex-column">
-        <span>Имя:</span>
+      <form-field
+        :title="'Имя:'"
+        :type="'text'"
+        :placeholderText="'Введите имя'"
+        :validator="this.textValidator"
+        :warningText="'Имя должно иметь длину минимум 2 символа'"
+        @updateField="this.isValidName = $event"
+        @enterField="this.name = $event"
+      />
+
+      <form-field
+        class="mt-2"
+        :title="'Фамилия:'"
+        :type="'text'"
+        :placeholderText="'Введите фамилию'"
+        :validator="this.textValidator"
+        :warningText="'Фамилия должна иметь длину минимум 2 символа'"
+        @updateField="this.isValidSurname = $event"
+        @enterField="this.surname = $event"
+      />
+
+      <form-field
+        class="mt-2"
+        :title="'Email:'"
+        :type="'text'"
+        :placeholderText="'Введите email'"
+        :validator="this.emailValidator"
+        :warningText="'Некорректный email'"
+        @updateField="this.isValidEmail = $event"
+        @enterField="this.email = $event"
+      />
+
+      <form-field
+        class="mt-2"
+        :title="'Пароль:'"
+        :type="'password'"
+        :placeholderText="'Введите пароль'"
+        :validator="this.passwordValidator"
+        :warningText="'Пароль должен содержать не менее 8 символов, включая прописные и строчные буквы, «+», а также хотя бы одну цифру от 0 до 9.'"
+        @updateField="this.isValidPassword = $event"
+        @enterField="this.password = $event"
+      />
+
+      <!-- <span>Имя:</span>
         <app-input
           class="auth-input mt-1"
           v-model:value="this.name"
@@ -55,7 +97,7 @@
           Пароль должен содержать не менее 8 символов, включая прописные и
           строчные буквы, «+», а также хотя бы одну цифру от 0 до 9
         </app-warning-text>
-      </div>
+      </div> -->
 
       <app-button
         class="mt-6"
@@ -90,75 +132,28 @@
 
 <script>
 import { userService } from "../services/UserService";
+import { validateText } from "../helpers/TextValidator";
+import { validateEmail } from "../helpers/EmailValidator";
+import { validatePassword } from "../helpers/PasswordValidator";
+import FormField from "../components/FormField.vue";
 
 export default {
-  components: {},
+  components: { FormField },
   data() {
     return {
       name: "",
       surname: "",
       email: "",
       password: "",
-      isNameChanged: false,
-      isSurnameChanged: false,
-      isEmailChanged: false,
-      isPasswordChanged: false,
+      textValidator: validateText,
+      emailValidator: validateEmail,
+      passwordValidator: validatePassword,
+      isValidName: false,
+      isValidSurname: false,
+      isValidEmail: false,
+      isValidPassword: false,
       showErrorMessage: false,
     };
-  },
-
-  computed: {
-    isValidName() {
-      return this.name.length >= 2;
-    },
-
-    isValidSurname() {
-      return this.surname.length >= 2;
-    },
-
-    isValidEmail() {
-      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return emailPattern.test(this.email);
-    },
-
-    isValidPassword() {
-      const passwordPattern = /^(?=.*[0-9])(?=.*[a-zA-Z]).{8,}$/;
-      return passwordPattern.test(this.password);
-    },
-  },
-
-  watch: {
-    name() {
-      if (this.name.length == 0) {
-        this.isNameChanged = false;
-      } else {
-        this.isNameChanged = true;
-      }
-    },
-
-    surname() {
-      if (this.surname.length == 0) {
-        this.isSurnameChanged = false;
-      } else {
-        this.isSurnameChanged = true;
-      }
-    },
-
-    email() {
-      if (this.email.length == 0) {
-        this.isEmailChanged = false;
-      } else {
-        this.isEmailChanged = true;
-      }
-    },
-
-    password() {
-      if (this.password.length == 0) {
-        this.isPasswordChanged = false;
-      } else {
-        this.isPasswordChanged = true;
-      }
-    },
   },
 
   methods: {

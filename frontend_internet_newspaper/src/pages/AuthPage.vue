@@ -29,6 +29,9 @@
       >
         Войти
       </app-button>
+      <app-warning-text v-if="this.showErrorMessage">
+        Неправильное имя пользовтеля или пароль
+      </app-warning-text>
 
       <div class="d-flex justify-center mt-1">
         <span>
@@ -64,8 +67,7 @@ export default {
       passwordValidator: validatePassword,
       isValidEmail: false,
       isValidPassword: false,
-      // isEmailChanged: false,
-      // isPasswordChanged: false,
+      showErrorMessage: false,
       userStore: useUserStore(),
     };
   },
@@ -76,7 +78,7 @@ export default {
         await userService.signIn(this.email, this.password);
         this.$router.push("/");
       } catch (error) {
-        alert("Неправильное имя пользовтеля или пароль");
+        this.showErrorMessage = true;
       }
     },
   },
