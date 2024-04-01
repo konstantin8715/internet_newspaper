@@ -3,9 +3,9 @@
     <app-button v-if="this.userStore.isAdmin" @click="this.open = true">
       {{ action }}
     </app-button>
-  
+
     <v-dialog v-model="open" width="auto">
-      <div class="dialog-block mx-auto pa-8 overflow-auto">
+      <div class="dialog-block mx-auto pa-6 overflow-auto">
         <form-field
           :title="'Заголовок:'"
           :type="'text'"
@@ -16,8 +16,9 @@
           :value="this.localTitle"
           @enterField="this.localTitle = $event"
         />
-  
+
         <form-field
+          class="mt-2"
           :title="'Текст:'"
           :type="'textarea'"
           :placeholderText="'Введите текст новости'"
@@ -27,34 +28,40 @@
           :value="this.localText"
           @enterField="this.localText = $event"
         />
-  
+
         <form-field
+          class="mt-2"
           :title="'Ссылка на изображение:'"
           :type="'text'"
           :placeholderText="'Вставьте ссылку на изображение'"
+          :validator="this.urlValidator"
+          :warningText="'Ссылка должна иметь формат URL'"
+          @updateField="this.isValidUrl = $event"
           :value="this.localPictureUrl"
           @enterField="this.localPictureUrl = $event"
         />
-  
+
         <img
           class="post-img d-block mt-4 mx-auto w-50 h-50"
           :src="localPictureUrl"
         />
+
+        <div class="mt-4 d-flex justify-end">
+          <news-confirm-button
+            :isValidTitle="this.isValidTitle"
+            :isValidText="this.isValidText"
+            :isValidUrl="this.isValidUrl"
+            :text="action"
+            @confirm="
+              $emit('enterDialog', localTitle, localText, localPictureUrl);
+              this.open = false;
+            "
+          />
   
-        <news-confirm-button
-          class="ms-auto"
-          :isValidTitle="this.isValidTitle"
-          :isValidText="this.isValidText"
-          :text="action"
-          @confirm="
-            $emit('enterDialog', localTitle, localText, localPictureUrl);
-            this.open = false;
-          "
-        />
-  
-        <app-button class="ms-auto" @click="this.open = false">
-          Отмена
-        </app-button>
+          <app-button class="ml-2" @click="this.open = false">
+            Отмена
+          </app-button>
+        </div>
       </div>
     </v-dialog>
   </div>
@@ -65,6 +72,7 @@ import { useUserStore } from "../stores/UserStore";
 import FormField from "./FormField.vue";
 import NewsConfirmButton from "./NewsConfirmButton.vue";
 import { validateText } from "../helpers/TextValidator";
+import { validateUrl } from "../helpers/UrlValidator";
 
 export default {
   name: "news-change-block",
@@ -104,6 +112,7 @@ export default {
   created() {
     this.isValidTitle = this.textValidator(this.localTitle);
     this.isValidText = this.textValidator(this.localText);
+    this.isValidUrl = this.textValidator(this.localPictureUrl);
   },
 
   data() {
@@ -114,8 +123,10 @@ export default {
       userStore: useUserStore(),
       open: false,
       textValidator: validateText,
+      urlValidator: validateUrl,
       isValidTitle: false,
       isValidText: false,
+      isValidUrl: false,
     };
   },
 
@@ -128,9 +139,8 @@ export default {
 @import "../font";
 
 .dialog-block {
-  width: 70%;
+  width: 800px;
   height: 50%;
-  margin-top: 10px;
   background: $dark-primary;
   display: flex;
   flex-direction: column;

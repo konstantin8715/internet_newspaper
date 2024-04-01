@@ -1,6 +1,6 @@
 <template>
-  <div class="d-flex flex-column">
-    <app-button class="mt-6" :disabled="isValid" @click="$emit('confirm')">
+  <div>
+    <app-button :disabled="isValid" @click="$emit('confirm')">
       {{ text }}
     </app-button>
   </div>
@@ -20,6 +20,11 @@ export default {
       requiered: true,
     },
 
+    isValidUrl: {
+      type: Boolean,
+      requiered: true,
+    },
+
     text: {
       type: String,
       requiered: true,
@@ -28,7 +33,7 @@ export default {
 
   computed: {
     isValid() {
-      return !this.isValidTitle || !this.isValidText;
+      return !this.isValidTitle || !this.isValidText || !this.isValidUrl;
     },
   },
 

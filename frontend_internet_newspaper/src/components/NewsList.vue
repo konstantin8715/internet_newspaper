@@ -4,7 +4,7 @@
       <news-item :post="post" />
     </div>
     <news-change-block
-      class="mx-auto mt-4 pb-4"
+      class="d-flex justify-center mt-8 pb-8"
       :action="'Добавить новость'"
       @enterDialog="createNews"
     />
@@ -43,6 +43,14 @@ export default {
       } catch (error) {
         console.log(error);
         alert("Не удалось создать новость");
+      }
+    },
+
+    async getFreshNews() {
+      try {
+        await this.newsStore.loadNews();
+      } catch (error) {
+        alert("Ошибка при загрузке новостей");
       }
     },
   },

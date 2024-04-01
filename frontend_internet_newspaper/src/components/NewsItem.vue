@@ -8,8 +8,13 @@
         :pictureUrl="post.picture.url"
         @enterDialog="updateNews"
       />
-  
-      <app-button @click="deleteNews" class="ml-2" color="red-darken-4">
+
+      <app-button
+        v-if="this.userStore.isAdmin"
+        @click="deleteNews"
+        class="ml-2"
+        color="red-darken-4"
+      >
         Удалить новость
       </app-button>
     </div>

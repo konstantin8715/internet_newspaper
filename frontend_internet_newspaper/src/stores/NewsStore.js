@@ -63,11 +63,12 @@ export const useNewsStore = defineStore("useNewsStore", {
         const requestNews = {
           newsTitle: news.newsTitle,
           newsText: news.newsText,
-          datePublishedNews: new Date(),
+          datePublishedNews: new Date().toISOString(),
           likes: [],
           picture: news.picture,
           themes: [],
         };
+        console.log(requestNews);
         await newsService.createNews(requestNews, userStore);
       } catch (error) {
         throw error;

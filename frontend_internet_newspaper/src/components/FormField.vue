@@ -6,7 +6,7 @@
       class="auth-input mt-1"
       :value="value"
       @update:value="
-        // value = $event;
+        value = $event;
         $emit('updateField', this.isValid);
         $emit('enterField', $event);
       "
@@ -18,13 +18,12 @@
       class="auth-input mt-1"
       :value="value"
       @update:value="
-        // value = $event;
+        value = $event;
         $emit('updateField', this.isValid);
         $emit('enterField', $event);
       "
       :placeholder="placeholderText"
     />
-    {{ this.isValid }}
     <app-warning-text v-if="!this.isValid && this.isChanged">
       {{ warningText }}
     </app-warning-text>
@@ -75,8 +74,8 @@ export default {
 
   computed: {
     isValid() {
+      // console.log(this.validator);
       if (this.validator) {
-        // console.log(this.validator(this.value));
         return this.validator(this.value);
       }
     },

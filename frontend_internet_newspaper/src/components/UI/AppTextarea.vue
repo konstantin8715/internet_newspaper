@@ -20,6 +20,10 @@ export default {
     },
   },
 
+  mounted() {
+    this.resize();
+  },
+
   methods: {
     resize() {
       const textarea = this.$refs.textarea;

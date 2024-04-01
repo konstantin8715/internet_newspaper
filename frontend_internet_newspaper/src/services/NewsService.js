@@ -33,7 +33,7 @@ export const newsService = {
     } catch (error) {
       try {
         await userService.refreshToken(admin);
-        this.createNews(news, admin);
+        // this.createNews(news, admin);
       } catch (error) {
         throw error;
       }
