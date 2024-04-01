@@ -22,16 +22,16 @@
         @enterField="this.password = $event"
       />
 
-      <app-button
-        class="mt-6"
-        :disabled="!this.isValidEmail || !this.isValidPassword"
-        @click="signIn"
-      >
-        Войти
-      </app-button>
-      <app-warning-text v-if="this.showErrorMessage">
-        Неправильное имя пользовтеля или пароль
-      </app-warning-text>
+      <form-confirm-button
+        :isValidName="true"
+        :isValidSurname="true"
+        :isValidEmail="this.isValidEmail"
+        :isValidPassword="this.isValidPassword"
+        :text="'Войти'"
+        :warningText="'Неправильное имя пользовтеля или пароль'"
+        :showErrorMessage="this.showErrorMessage"
+        @confirm="signIn"
+      />
 
       <div class="d-flex justify-center mt-1">
         <span>
@@ -52,11 +52,12 @@
 import { useUserStore } from "../stores/UserStore";
 import { userService } from "../services/UserService";
 import FormField from "../components/FormField.vue";
+import FormConfirmButton from "../components/FormConfirmButton.vue";
 import { validateEmail } from "../helpers/EmailValidator";
 import { validatePassword } from "../helpers/PasswordValidator";
 
 export default {
-  components: { FormField },
+  components: { FormField, FormConfirmButton },
   data() {
     return {
       // email: "aleksandrov@yandex.ru",

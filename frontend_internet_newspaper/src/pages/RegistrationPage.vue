@@ -44,7 +44,7 @@
         @enterField="this.password = $event"
       />
 
-      <form-confirmed-button
+      <form-confirm-button
         :isValidName="this.isValidName"
         :isValidSurname="this.isValidSurname"
         :isValidEmail="this.isValidEmail"
@@ -54,22 +54,6 @@
         :showErrorMessage="this.showErrorMessage"
         @confirm="signup"
       />
-
-      <!-- <app-button
-        class="mt-6"
-        :disabled="
-          !this.isValidEmail ||
-          !this.isValidPassword ||
-          !this.isValidName ||
-          !this.isValidSurname
-        "
-        @click="signup"
-      >
-        Зарегистрироваться
-      </app-button>
-      <app-warning-text v-if="this.showErrorMessage">
-        Пользователь с таким email уже существует
-      </app-warning-text> -->
 
       <div class="d-flex justify-center mt-1">
         <span>
@@ -92,10 +76,10 @@ import { validateText } from "../helpers/TextValidator";
 import { validateEmail } from "../helpers/EmailValidator";
 import { validatePassword } from "../helpers/PasswordValidator";
 import FormField from "../components/FormField.vue";
-import FormConfirmedButton from "../components/FormConfirmButton.vue";
+import FormConfirmButton from "../components/FormConfirmButton.vue";
 
 export default {
-  components: { FormField, FormConfirmedButton },
+  components: { FormField, FormConfirmButton },
   data() {
     return {
       name: "",

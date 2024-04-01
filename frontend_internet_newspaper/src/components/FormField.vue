@@ -2,6 +2,7 @@
   <div class="d-flex flex-column">
     <span>{{ title }}</span>
     <app-input
+      v-if="type != 'textarea'"
       class="auth-input mt-1"
       :value="value"
       @update:value="
@@ -10,6 +11,17 @@
         $emit('enterField', this.value);
       "
       :type="type"
+      :placeholder="placeholderText"
+    />
+    <app-textarea
+      v-else
+      class="auth-input mt-1"
+      :value="value"
+      @update:value="
+        value = $event;
+        $emit('updateField', this.isValid);
+        $emit('enterField', this.value);
+      "
       :placeholder="placeholderText"
     />
     <app-warning-text v-if="!this.isValid && this.isChanged">
@@ -46,19 +58,25 @@ export default {
       type: Function,
       requiered: false,
     },
+
+    value: {
+      type: String,
+      requiered: false,
+      default: "",
+    },
   },
 
   data() {
     return {
-      value: "",
       isChanged: false,
     };
   },
 
   computed: {
     isValid() {
-      console.log(this.validator(this.value));
-      return this.validator(this.value);
+      if (this.validator) {
+        return this.validator(this.value);
+      }
     },
   },
 
@@ -69,7 +87,6 @@ export default {
       } else {
         this.isChanged = true;
       }
-      // this.isChanged = this.value.length == 0;
     },
   },
 
