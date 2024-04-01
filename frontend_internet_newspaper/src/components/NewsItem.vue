@@ -1,12 +1,19 @@
 <template>
   <div class="content-container">
-    <app-dialog
+    <news-change-block
+      :action="'Изменить новость'"
+      :title="post.newsTitle"
+      :text="post.newsText"
+      :pictureUrl="post.picture.url"
+      @enterDialog="updateNews"
+    />
+    <!-- <app-dialog
       :title="post.newsTitle"
       :text="post.newsText"
       :pictureUrl="post.picture.url"
       :enterText="'Изменить новость'"
       @enterDialog="updateNews"
-    />
+    /> -->
 
     <h1 class="post-title">{{ post.newsTitle }}</h1>
     <div class="post-text mt-4">
@@ -56,12 +63,12 @@
 <script>
 import { useUserStore } from "../stores/UserStore";
 import { useNewsStore } from "../stores/NewsStore";
-import AppButton from "./UI/AppButton.vue";
 import CommentsList from "./CommentsList.vue";
+import NewsChangeBlock from "./NewsChangeBlock.vue";
 
 export default {
   name: "news-item",
-  components: { AppButton, CommentsList },
+  components: { CommentsList, NewsChangeBlock },
 
   props: {
     post: {
@@ -100,8 +107,8 @@ export default {
         this.post.newsTitle = title;
         this.post.newsText = text;
         this.post.picture.url = pictureUrl;
-        await this.newsStore.updateNews(news, this.userStore);
-        news.change = false;
+        await this.newsStore.updateNews(post, this.userStore);
+        // post.change = false;
       } catch (error) {
         console.log(error);
         alert("Не удалось обновить новость");
@@ -115,12 +122,6 @@ export default {
         console.log(error);
         alert("Не удалось загрузить комментарии");
       }
-    },
-
-    openDialog(news) {
-      news.change = true;
-      this.updateTitle = news.newsTitle;
-      this.updateText = news.newsText;
     },
   },
 };

@@ -18,22 +18,22 @@ export default {
   name: "form-confirm-button",
   props: {
     isValidName: {
-      type: String,
-      requiered: false,
+      type: Boolean,
+      requiered: true,
     },
 
     isValidSurname: {
-      type: String,
-      requiered: false,
+      type: Boolean,
+      requiered: true,
     },
 
     isValidEmail: {
-      type: String,
+      type: Boolean,
       requiered: true,
     },
 
     isValidPassword: {
-      type: String,
+      type: Boolean,
       requiered: true,
     },
 
@@ -49,7 +49,7 @@ export default {
 
     showErrorMessage: {
       type: Boolean,
-      requiered: true,
+      requiered: false,
     },
   },
 
