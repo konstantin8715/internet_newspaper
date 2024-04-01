@@ -1,61 +1,63 @@
 <template>
-  <app-button v-if="this.userStore.isAdmin" @click="this.open = true">
-    {{ action }}
-  </app-button>
-
-  <v-dialog v-model="open" width="auto">
-    <div class="dialog-block mx-auto pa-8 overflow-auto">
-      <form-field
-        :title="'Заголовок:'"
-        :type="'text'"
-        :placeholderText="'Введите загловок'"
-        :validator="this.textValidator"
-        :warningText="'Заголовок должно иметь длину минимум 2 символа'"
-        @updateField="this.isValidTitle = $event"
-        :value="this.localTitle"
-        @enterField="this.localTitle = $event"
-      />
-
-      <form-field
-        :title="'Текст:'"
-        :type="'textarea'"
-        :placeholderText="'Введите текст новости'"
-        :validator="this.textValidator"
-        :warningText="'Текст новости не должен быть пустым и должен иметь длину минимум 2 символа'"
-        @updateField="this.isValidText = $event"
-        :value="this.localText"
-        @enterField="this.localText = $event"
-      />
-
-      <form-field
-        :title="'Ссылка на изображение:'"
-        :type="'text'"
-        :placeholderText="'Вставьте ссылку на изображение'"
-        :value="this.localPictureUrl"
-        @enterField="this.localPictureUrl = $event"
-      />
-
-      <img
-        class="post-img d-block mt-4 mx-auto w-50 h-50"
-        :src="localPictureUrl"
-      />
-
-      <news-confirm-button
-        class="ms-auto"
-        :isValidTitle="this.isValidTitle"
-        :isValidText="this.isValidText"
-        :text="action"
-        @confirm="
-          $emit('enterDialog', localTitle, localText, localPictureUrl);
-          this.open = false;
-        "
-      />
-
-      <app-button class="ms-auto" @click="this.open = false">
-        Отмена
-      </app-button>
-    </div>
-  </v-dialog>
+  <div>
+    <app-button v-if="this.userStore.isAdmin" @click="this.open = true">
+      {{ action }}
+    </app-button>
+  
+    <v-dialog v-model="open" width="auto">
+      <div class="dialog-block mx-auto pa-8 overflow-auto">
+        <form-field
+          :title="'Заголовок:'"
+          :type="'text'"
+          :placeholderText="'Введите загловок'"
+          :validator="this.textValidator"
+          :warningText="'Заголовок должно иметь длину минимум 2 символа'"
+          @updateField="this.isValidTitle = $event"
+          :value="this.localTitle"
+          @enterField="this.localTitle = $event"
+        />
+  
+        <form-field
+          :title="'Текст:'"
+          :type="'textarea'"
+          :placeholderText="'Введите текст новости'"
+          :validator="this.textValidator"
+          :warningText="'Текст новости не должен быть пустым и должен иметь длину минимум 2 символа'"
+          @updateField="this.isValidText = $event"
+          :value="this.localText"
+          @enterField="this.localText = $event"
+        />
+  
+        <form-field
+          :title="'Ссылка на изображение:'"
+          :type="'text'"
+          :placeholderText="'Вставьте ссылку на изображение'"
+          :value="this.localPictureUrl"
+          @enterField="this.localPictureUrl = $event"
+        />
+  
+        <img
+          class="post-img d-block mt-4 mx-auto w-50 h-50"
+          :src="localPictureUrl"
+        />
+  
+        <news-confirm-button
+          class="ms-auto"
+          :isValidTitle="this.isValidTitle"
+          :isValidText="this.isValidText"
+          :text="action"
+          @confirm="
+            $emit('enterDialog', localTitle, localText, localPictureUrl);
+            this.open = false;
+          "
+        />
+  
+        <app-button class="ms-auto" @click="this.open = false">
+          Отмена
+        </app-button>
+      </div>
+    </v-dialog>
+  </div>
 </template>
 
 <script>
@@ -78,16 +80,19 @@ export default {
     title: {
       type: String,
       requiered: true,
+      default: "",
     },
 
     text: {
       type: String,
       requiered: true,
+      default: "",
     },
 
     pictureUrl: {
       type: String,
       requiered: true,
+      default: "",
     },
 
     // enterText: {

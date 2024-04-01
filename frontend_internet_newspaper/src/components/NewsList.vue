@@ -1,11 +1,14 @@
 <template>
-  <div v-if="this.newsStore.hasNews"
-    class="post"
-    v-for="post in this.newsStore.news"
-    :key="post.id"
-  >
-    <news-item :post="post" />
-  </div>
+  <template v-if="this.newsStore.hasNews">
+    <div class="post" v-for="post in this.newsStore.news" :key="post.id">
+      <news-item :post="post" />
+    </div>
+    <news-change-block
+      class="mx-auto mt-4 pb-4"
+      :action="'Добавить новость'"
+      @enterDialog="createNews"
+    />
+  </template>
   <div v-else class="d-flex justify-center align-center mt-16">
     <span class="no-news-banner">Нет актуальных новостей</span>
   </div>
@@ -14,17 +17,35 @@
 <script>
 import NewsItem from "./NewsItem.vue";
 import { useNewsStore } from "../stores/NewsStore";
+import NewsChangeBlock from "./NewsChangeBlock.vue";
 
 export default {
   name: "news-list",
-  components: { NewsItem },
+  components: { NewsItem, NewsChangeBlock },
   data() {
     return {
       newsStore: useNewsStore(),
     };
   },
 
-  methods: {},
+  methods: {
+    async createNews(title, text, pictureUrl) {
+      try {
+        const createdNews = {
+          newsTitle: title,
+          newsText: text,
+          picture: {
+            url: pictureUrl,
+          },
+        };
+        await this.newsStore.createNews(createdNews, this.userStore);
+        this.getFreshNews();
+      } catch (error) {
+        console.log(error);
+        alert("Не удалось создать новость");
+      }
+    },
+  },
 };
 </script>
 
