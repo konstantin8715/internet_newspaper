@@ -1,47 +1,114 @@
 <template>
-  <!-- TODO: Сделать валидацию -->
-  <input
-    style="width: 500px; height: 100px; font-size: 32px"
-    v-model="name"
-    type="text"
-    placeholder="Введите имя"
-  />
-  <input
-    style="width: 500px; height: 100px; display: block; font-size: 32px"
-    v-model="surname"
-    type="text"
-    placeholder="Введите фамилию"
-  />
-  <input
-    style="width: 500px; height: 100px; font-size: 32px"
-    v-model="email"
-    type="text"
-    placeholder="Введите email"
-  />
-  <input
-    style="width: 500px; height: 100px; display: block; font-size: 32px"
-    v-model="password"
-    type="text"
-    placeholder="Введите пароль"
-  />
-  <div v-if="showErrorMessage">
-    Ошибка при отправке запроса на сервер или пользователь с данной почтой уже
-    сущестует. Попробуйте еще раз.
+  <div class="container">
+    <div class="registration-block mx-auto pa-8">
+      <form-field
+        :title="'Имя:'"
+        :type="'text'"
+        :placeholderText="'Введите имя'"
+        :validator="this.textValidator"
+        :warningText="'Имя должно иметь длину минимум 2 символа'"
+        @updateField="this.isValidName = $event"
+        @enterField="this.name = $event"
+      />
+
+      <form-field
+        class="mt-2"
+        :title="'Фамилия:'"
+        :type="'text'"
+        :placeholderText="'Введите фамилию'"
+        :validator="this.textValidator"
+        :warningText="'Фамилия должна иметь длину минимум 2 символа'"
+        @updateField="this.isValidSurname = $event"
+        @enterField="this.surname = $event"
+      />
+
+      <form-field
+        class="mt-2"
+        :title="'Email:'"
+        :type="'text'"
+        :placeholderText="'Введите email'"
+        :validator="this.emailValidator"
+        :warningText="'Некорректный email'"
+        @updateField="this.isValidEmail = $event"
+        @enterField="this.email = $event"
+      />
+
+      <form-field
+        class="mt-2"
+        :title="'Пароль:'"
+        :type="'password'"
+        :placeholderText="'Введите пароль'"
+        :validator="this.passwordValidator"
+        :warningText="'Пароль должен содержать не менее 8 символов, включая прописные и строчные буквы, «+», а также хотя бы одну цифру от 0 до 9.'"
+        @updateField="this.isValidPassword = $event"
+        @enterField="this.password = $event"
+      />
+
+      <form-confirmed-button
+        :isValidName="this.isValidName"
+        :isValidSurname="this.isValidSurname"
+        :isValidEmail="this.isValidEmail"
+        :isValidPassword="this.isValidPassword"
+        :text="'Зарегистрироваться'"
+        :warningText="'Пользователь с таким email уже существует'"
+        :showErrorMessage="this.showErrorMessage"
+        @confirm="signup"
+      />
+
+      <!-- <app-button
+        class="mt-6"
+        :disabled="
+          !this.isValidEmail ||
+          !this.isValidPassword ||
+          !this.isValidName ||
+          !this.isValidSurname
+        "
+        @click="signup"
+      >
+        Зарегистрироваться
+      </app-button>
+      <app-warning-text v-if="this.showErrorMessage">
+        Пользователь с таким email уже существует
+      </app-warning-text> -->
+
+      <div class="d-flex justify-center mt-1">
+        <span>
+          Уже есть аккаунт?
+          <span
+            class="registration-route text-decoration-underline cursor-pointer"
+            @click="$router.push('login')"
+          >
+            Войти
+          </span>
+        </span>
+      </div>
+    </div>
   </div>
-  <button style="margin-top: 15px" @click="signup">Зарегистрироваться</button>
 </template>
 
 <script>
 import { userService } from "../services/UserService";
+import { validateText } from "../helpers/TextValidator";
+import { validateEmail } from "../helpers/EmailValidator";
+import { validatePassword } from "../helpers/PasswordValidator";
+import FormField from "../components/FormField.vue";
+import FormConfirmedButton from "../components/FormConfirmButton.vue";
 
 export default {
-  components: {},
+  components: { FormField, FormConfirmedButton },
   data() {
     return {
       name: "",
       surname: "",
       email: "",
       password: "",
+      textValidator: validateText,
+      emailValidator: validateEmail,
+      passwordValidator: validatePassword,
+      isValidName: false,
+      isValidSurname: false,
+      isValidEmail: false,
+      isValidPassword: false,
       showErrorMessage: false,
     };
   },
@@ -49,24 +116,38 @@ export default {
   methods: {
     async signup() {
       try {
-        await userService.signUp(this.name, this.surname, this.email, this.password);
-        this.$router.push('login')
-        alert('Вы успешно зарегистрировались. Авторизуйтесь.');
+        await userService.signUp(
+          this.name,
+          this.surname,
+          this.email,
+          this.password
+        );
+        this.$router.push("login");
+        alert("Вы успешно зарегистрировались. Авторизуйтесь.");
       } catch (error) {
         this.showErrorMessage = true;
       }
-      // authenticationApi
-      //   .signUp(this.name, this.surname, this.email, this.password)
-      //   .then(() => this.$router.push('login'))
-      //   .catch((err) => {
-      //     console.log(err);
-      //     alert(
-      //       "Ошибка при отправке запроса на сервер или пользователь с данной почтой уже сущестует. Попробуйте еще раз."
-      //     );
-      //   });
     },
   },
 };
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+@import "../colors";
+@import "../font";
+
+.registration-block {
+  width: 70%;
+  height: 50%;
+  margin-top: 70px;
+  background: $dark-primary;
+  display: flex;
+  flex-direction: column;
+  color: $text;
+  border-radius: 5px;
+}
+
+.registration-route {
+  color: $light-primary;
+}
+</style>

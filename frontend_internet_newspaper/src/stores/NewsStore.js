@@ -9,6 +9,12 @@ export const useNewsStore = defineStore("useNewsStore", {
     news: [],
   }),
 
+  getters: {
+    hasNews() {
+      return this.news.length > 0;
+    }
+  },
+
   actions: {
     async loadNews() {
       // console.log("newsStore.loadNews()");

@@ -1,49 +1,110 @@
 <template>
-  <div>
-    <!-- TODO: Сделать валидацию -->
-    <input
-      style="width: 500px; height: 100px; font-size: 32px"
-      v-model="email"
-      type="text"
-    />
-    <input
-      style="width: 500px; height: 100px; display: block; font-size: 32px"
-      v-model="password"
-      type="text"
-    />
-    <button style="margin-top: 15px" @click="signIn">signin</button>
+  <div class="container">
+    <div class="auth-block mx-auto pa-8">
+      <form-field
+        :title="'Email:'"
+        :type="'text'"
+        :placeholderText="'Введите email'"
+        :validator="this.emailValidator"
+        :warningText="'Некорректный email'"
+        @updateField="this.isValidEmail = $event"
+        @enterField="this.email = $event"
+      />
+
+      <form-field
+        class="mt-2"
+        :title="'Пароль:'"
+        :type="'password'"
+        :placeholderText="'Введите пароль'"
+        :validator="this.passwordValidator"
+        :warningText="'Пароль должен содержать не менее 8 символов, включая прописные и строчные буквы, «+», а также хотя бы одну цифру от 0 до 9.'"
+        @updateField="this.isValidPassword = $event"
+        @enterField="this.password = $event"
+      />
+
+      <app-button
+        class="mt-6"
+        :disabled="!this.isValidEmail || !this.isValidPassword"
+        @click="signIn"
+      >
+        Войти
+      </app-button>
+      <app-warning-text v-if="this.showErrorMessage">
+        Неправильное имя пользовтеля или пароль
+      </app-warning-text>
+
+      <div class="d-flex justify-center mt-1">
+        <span>
+          Нет аккаунта?
+          <span
+            class="auth-route text-decoration-underline cursor-pointer"
+            @click="$router.push('signup')"
+          >
+            Зарегистрироваться
+          </span>
+        </span>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { useUserStore } from "../stores/UserStore";
-import { userService } from '../services/UserService';
+import { userService } from "../services/UserService";
+import FormField from "../components/FormField.vue";
+import { validateEmail } from "../helpers/EmailValidator";
+import { validatePassword } from "../helpers/PasswordValidator";
 
 export default {
-  components: {},
+  components: { FormField },
   data() {
     return {
       // email: "aleksandrov@yandex.ru",
       // password: "Aleksandrov47",
-      email: "kostya.ignatev.14@mail.ru",
-      password: "Kostyaik22",
+      email: "",
+      password: "",
+      emailValidator: validateEmail,
+      passwordValidator: validatePassword,
+      isValidEmail: false,
+      isValidPassword: false,
+      showErrorMessage: false,
       userStore: useUserStore(),
     };
   },
 
   methods: {
-
     async signIn() {
       try {
         await userService.signIn(this.email, this.password);
         this.$router.push("/");
       } catch (error) {
-        alert('Неправильное имя пользовтеля или пароль');
+        this.showErrorMessage = true;
       }
     },
-
   },
 };
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+@import "../colors";
+@import "../font";
+
+.auth-block {
+  width: 70%;
+  height: 50%;
+  margin-top: 150px;
+  background: $dark-primary;
+  display: flex;
+  flex-direction: column;
+  color: $text;
+  border-radius: 5px;
+}
+
+.auth-input {
+  height: 35px;
+}
+
+.auth-route {
+  color: $light-primary;
+}
+</style>
