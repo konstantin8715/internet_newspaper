@@ -1,21 +1,20 @@
 <template>
   <div class="content-container">
-    <news-change-block
-      :action="'Изменить новость'"
-      :title="post.newsTitle"
-      :text="post.newsText"
-      :pictureUrl="post.picture.url"
-      @enterDialog="updateNews"
-    />
-    <!-- <app-dialog
-      :title="post.newsTitle"
-      :text="post.newsText"
-      :pictureUrl="post.picture.url"
-      :enterText="'Изменить новость'"
-      @enterDialog="updateNews"
-    /> -->
+    <div class="admin-buttons d-flex justify-end">
+      <news-change-block
+        :action="'Изменить новость'"
+        :title="post.newsTitle"
+        :text="post.newsText"
+        :pictureUrl="post.picture.url"
+        @enterDialog="updateNews"
+      />
+  
+      <app-button @click="deleteNews" class="ml-2" color="red-darken-4">
+        Удалить новость
+      </app-button>
+    </div>
 
-    <h1 class="post-title">{{ post.newsTitle }}</h1>
+    <h1 class="post-title mt-2">{{ post.newsTitle }}</h1>
     <div class="post-text mt-4">
       {{ post.newsText }}
     </div>
@@ -107,7 +106,7 @@ export default {
         this.post.newsTitle = title;
         this.post.newsText = text;
         this.post.picture.url = pictureUrl;
-        await this.newsStore.updateNews(post, this.userStore);
+        await this.newsStore.updateNews(this.post, this.userStore);
         // post.change = false;
       } catch (error) {
         console.log(error);
@@ -121,6 +120,14 @@ export default {
       } catch (error) {
         console.log(error);
         alert("Не удалось загрузить комментарии");
+      }
+    },
+
+    async deleteNews() {
+      try {
+        await this.newsStore.deleteNews(this.post.id, this.userStore);
+      } catch (error) {
+        alert("Не удалось удалить новость");
       }
     },
   },
