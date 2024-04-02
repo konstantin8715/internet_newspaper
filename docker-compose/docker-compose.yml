@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   backend:
-    image: aleksandrovyur11/internet_newspaper:backend
+    image: kostyan87/application.jar:latest
     container_name: backend
     depends_on:
       - psql-db
@@ -14,7 +14,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=postgre
 
   frontend:
-    image: aleksandrovyur11/internet_newspaper:frontend
+    image: kostyan87/internet_newspaper:frontend
     container_name: frontend
     ports:
       - "5173:5173"
