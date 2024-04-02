@@ -22,15 +22,18 @@
     <h1 class="post-title mt-2">{{ post.newsTitle }}</h1>
     <div class="post-text mt-4">
       <span>
-        {{ this.firstHalfOfPostText }}<!--
-        --><span v-if="post.newsText.length > 300 && !post.showFullText">...</span>
+        {{ this.firstHalfOfPostText
+        }}<!--
+        --><span v-if="post.newsText.length > 300 && !post.showFullText"
+          >...</span
+        >
         <span
           class="post-text-button text-decoration-underline cursor-pointer"
           @click="showHiddenText"
           v-if="post.newsText.length > 300 && !post.showFullText"
           >Показать больше</span
-        > </span
-      >
+        >
+      </span>
       <span v-if="post.showFullText">
         {{ this.secondHalfOfPostText }}
       </span>
@@ -38,7 +41,7 @@
 
     <img class="post-img d-block mt-4 mx-auto" :src="post.picture.url" />
 
-    <div class="post-actions d-flex mt-4 flex-column">
+    <div class="d-flex mt-4 flex-column">
       <div class="d-flex justify-space-between align-end">
         <div>
           <v-btn class="post-like w-20" @click="likeNews">
@@ -145,7 +148,6 @@ export default {
         this.post.newsText = text;
         this.post.picture.url = pictureUrl;
         await this.newsStore.updateNews(this.post, this.userStore);
-        // post.change = false;
       } catch (error) {
         console.log(error);
         alert("Не удалось обновить новость");
@@ -170,8 +172,6 @@ export default {
     },
 
     showHiddenText() {
-      // const hiddenText = this.$refs.hiddenText;
-      // hiddenText.style.display = "block";
       this.post.showFullText = true;
     },
   },

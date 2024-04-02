@@ -8,20 +8,9 @@
       Показать предыдущие комментарии
     </span>
 
-    <!-- style="
-        display: flex;
-        border: 2px solid white;
-        margin-top: 15px;
-        width: 100%;
-      " -->
-    <div v-for="comment in sortedComments(post)">
+    <div v-for="comment in sortedComments(post)" :key="comment.id">
       <comment-item :comment="comment" @deleteComment="this.deleteComment" />
     </div>
-
-    <!-- <enter-comment-item
-      v-model:comment="this.comment"
-      @enterComment="this.saveComment"
-    /> -->
 
     <app-textarea
       class="mt-6 h-10"
@@ -92,7 +81,7 @@ export default {
         await this.newsStore.saveCommentForNews(
           this.post,
           this.comment,
-          this.userStore,
+          this.userStore
         );
         this.comment = "";
       } catch (error) {
@@ -132,5 +121,3 @@ export default {
   },
 };
 </script>
-
-<style scoped lang="scss"></style>

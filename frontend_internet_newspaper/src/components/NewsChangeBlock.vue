@@ -42,7 +42,7 @@
         />
 
         <img
-          class="post-img d-block mt-4 mx-auto w-50 h-50"
+          class="d-block mt-4 mx-auto w-50 h-50"
           :src="localPictureUrl"
         />
 
@@ -102,11 +102,6 @@ export default {
       requiered: true,
       default: "",
     },
-
-    // enterText: {
-    //   type: String,
-    //   requiered: true,
-    // },
   },
 
   created() {
@@ -146,12 +141,5 @@ export default {
   flex-direction: column;
   color: $text;
   border-radius: 5px;
-}
-
-.post-text {
-  height: 200px;
-}
-
-.post-img {
 }
 </style>

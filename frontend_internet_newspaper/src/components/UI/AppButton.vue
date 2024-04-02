@@ -7,12 +7,6 @@
 <script>
 export default {
   name: "app-button",
-  props: {
-    prop1: {
-      type: String,
-      requiered: true,
-    },
-  },
 };
 </script>
 

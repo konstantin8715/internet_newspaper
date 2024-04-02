@@ -3,7 +3,7 @@
     <span>{{ title }}</span>
     <app-input
       v-if="type != 'textarea'"
-      class="auth-input mt-1"
+      class="mt-1"
       :value="value"
       @update:value="
         value = $event;
@@ -15,7 +15,7 @@
     />
     <app-textarea
       v-else
-      class="auth-input mt-1"
+      class="mt-1"
       :value="value"
       @update:value="
         value = $event;
@@ -74,7 +74,6 @@ export default {
 
   computed: {
     isValid() {
-      // console.log(this.validator);
       if (this.validator) {
         return this.validator(this.value);
       }
@@ -94,26 +93,3 @@ export default {
   emits: ["updateField", "enterField"],
 };
 </script>
-
-<style scoped lang="scss">
-@import "../font";
-@import "../colors";
-
-.comment {
-  border-bottom: 1px solid $light-primary;
-  color: $text;
-  font-size: $medium-text;
-}
-
-.comment-author,
-.comment-date,
-.comment-delete {
-  color: $light-primary;
-  font-size: $small-text;
-}
-
-.comment-data-text {
-  word-wrap: break-word;
-  white-space: pre-line;
-}
-</style>

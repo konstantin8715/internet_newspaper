@@ -1,32 +1,27 @@
-import AuthPage from '../pages/AuthPage.vue';
-import MainPage from '../pages/MainPage.vue';
-import RegistrationPage from '../pages/RegistrationPage.vue';
-import {
-    createRouter,
-    createWebHistory
-} from 'vue-router';
+import { createRouter, createWebHistory } from "vue-router";
 
-const routes = [{
-    path: '/',
-    component: MainPage,
-},
-{
-    path: '/login',
-    component: AuthPage,
-},
-{
-    path: '/signup',
-    component: RegistrationPage,
-},
-{
-    path: '/:catchAll(.*)',
-    redirect: '/',
-}
+const routes = [
+  {
+    path: "/",
+    component: async () => await import("../pages/MainPage.vue"),
+  },
+  {
+    path: "/login",
+    component: async () => await import("../pages/AuthPage.vue"),
+  },
+  {
+    path: "/signup",
+    component: async () => await import("../pages/RegistrationPage.vue"),
+  },
+  {
+    path: "/:catchAll(.*)",
+    redirect: "/",
+  },
 ];
 
 const router = createRouter({
-routes,
-history: createWebHistory(),
+  routes,
+  history: createWebHistory(),
 });
 
 export default router;

@@ -1,23 +1,25 @@
 import axios from "axios";
 
 export const commentsApi = {
+  URL: import.meta.env.VITE_API_URL,
+
   getCommentsForNews(newsId) {
     return axios({
-      url: `http://localhost:8080/comment/show?newsId=${newsId}`,
+      url: `${this.URL}/comment/show?newsId=${newsId}`,
       method: "get",
     });
   },
 
   checkExistComment(newsId) {
     return axios({
-      url: `http://localhost:8080/comment/check-db?newsId=${newsId}`,
+      url: `${this.URL}/comment/check-db?newsId=${newsId}`,
       method: "post",
     });
   },
 
   saveComment(newsId, textComment) {
     return axios({
-      url: `http://localhost:8080/comment/save?newsId=${newsId}`,
+      url: `${this.URL}/comment/save?newsId=${newsId}`,
       method: "post",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -30,7 +32,7 @@ export const commentsApi = {
 
   userDeleteComment(commentId) {
     return axios({
-      url: `http://localhost:8080/comment/user/${commentId}`,
+      url: `${this.URL}/comment/user/${commentId}`,
       method: "delete",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -40,7 +42,7 @@ export const commentsApi = {
 
   adminDeleteComment(commentId) {
     return axios({
-      url: `http://localhost:8080/comment/admin/${commentId}`,
+      url: `${this.URL}/comment/admin/${commentId}`,
       method: "delete",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,

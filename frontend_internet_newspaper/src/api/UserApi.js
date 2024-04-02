@@ -1,10 +1,12 @@
 import axios from "axios";
 
 export const userApi = {
+  URL: import.meta.env.VITE_API_URL,
+
   signUp(name, surname, email, password) {
     return axios({
       method: "post",
-      url: "http://localhost:8080/auth/sign-up",
+      url: `${this.URL}/auth/sign-up`,
       data: {
         name,
         surname,
@@ -17,7 +19,7 @@ export const userApi = {
   signIn(email, password) {
     return axios({
       method: "post",
-      url: "http://localhost:8080/auth/sign-in",
+      url: `${this.URL}/auth/sign-in`,
       data: {
         email,
         password,
@@ -28,7 +30,7 @@ export const userApi = {
   refreshToken() {
     return axios({
       method: "post",
-      url: "http://localhost:8080/auth/refresh-token",
+      url: `${this.URL}/auth/refresh-token`,
       data: {
         refreshToken: localStorage.getItem("refreshToken"),
       },
@@ -38,7 +40,7 @@ export const userApi = {
   signOut() {
     return axios({
       method: "post",
-      url: "http://localhost:8080/auth/sign-out",
+      url: `${this.URL}/auth/sign-out`,
       data: {
         refreshToken: localStorage.getItem("refreshToken"),
       },

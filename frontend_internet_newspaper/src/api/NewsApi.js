@@ -1,16 +1,18 @@
 import axios from "axios";
 
 export const newsApi = {
+  URL: import.meta.env.VITE_API_URL,
+
   getFreshNews() {
     return axios({
-      url: "http://localhost:8080/news/fresh-news",
+      url: `${this.URL}/news/fresh-news`,
       method: "get",
     });
   },
 
   updateNews(news) {
     return axios({
-      url: `http://localhost:8080/news/${news.id}`,
+      url: `${this.URL}/news/${news.id}`,
       method: "put",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -23,7 +25,7 @@ export const newsApi = {
 
   createNews(news) {
     return axios({
-      url: `http://localhost:8080/news/save`,
+      url: `${this.URL}/news/save`,
       method: "post",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -36,11 +38,11 @@ export const newsApi = {
 
   deleteNews(newsId) {
     return axios({
-      url: `http://localhost:8080/news/${newsId}`,
+      url: `${this.URL}/news/${newsId}`,
       method: "delete",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
     });
-  }
+  },
 };

@@ -60,8 +60,6 @@ export default {
   components: { FormField, FormConfirmButton },
   data() {
     return {
-      // email: "aleksandrov@yandex.ru",
-      // password: "Aleksandrov47",
       email: "",
       password: "",
       emailValidator: validateEmail,

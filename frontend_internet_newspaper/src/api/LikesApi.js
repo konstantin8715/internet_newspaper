@@ -1,9 +1,11 @@
 import axios from "axios";
 
 export const likesApi = {
+  URL: import.meta.env.VITE_API_URL,
+
   saveLike(newsId) {
     return axios({
-      url: `http://localhost:8080/likes/save?newsId=${newsId}`,
+      url: `${this.URL}/likes/save?newsId=${newsId}`,
       method: "post",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -13,7 +15,7 @@ export const likesApi = {
 
   deleteLike(newsId) {
     return axios({
-      url: `http://localhost:8080/likes?newsId=${newsId}`,
+      url: `${this.URL}/likes?newsId=${newsId}`,
       method: "delete",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,

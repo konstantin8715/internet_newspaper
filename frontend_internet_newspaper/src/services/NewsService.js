@@ -8,7 +8,6 @@ export const newsService = {
       const data = response.data;
       return data;
     } catch (error) {
-      // TODO: Сделать свои объекты ошибок
       throw error;
     }
   },
