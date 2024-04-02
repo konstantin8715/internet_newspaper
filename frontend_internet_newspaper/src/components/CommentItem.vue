@@ -1,7 +1,9 @@
 <template>
   <div class="comment d-flex flex-column mt-4">
     <div class="d-flex justify-space-between">
-      <div class="comment-author">{{ comment.user.name }} {{ comment.user.surname }}</div>
+      <div class="comment-author">
+        {{ comment.user.name }} {{ comment.user.surname }}
+      </div>
       <span
         v-if="comment.user.id == this.userStore.id || this.userStore.isAdmin"
         @click="$emit('deleteComment', comment)"
@@ -25,6 +27,7 @@
 <script>
 import { useUserStore } from "../stores/UserStore";
 import AppButton from "./UI/AppButton.vue";
+import { formatDate } from "../helpers/DataFormatter.js";
 
 export default {
   name: "comment-item",
@@ -45,16 +48,7 @@ export default {
 
   computed: {
     formattedDate() {
-      const date = new Date(this.comment.datePublishedComment);
-      return date.toLocaleString("ru-RU", {
-        timeZone: "UTC",
-        hour12: false,
-        hour: "2-digit",
-        minute: "2-digit",
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      });
+      return formatDate(new Date(this.comment.datePublishedComment));
     },
   },
 
@@ -72,7 +66,9 @@ export default {
   font-size: $medium-text;
 }
 
-.comment-author, .comment-date, .comment-delete {
+.comment-author,
+.comment-date,
+.comment-delete {
   color: $light-primary;
   font-size: $small-text;
 }

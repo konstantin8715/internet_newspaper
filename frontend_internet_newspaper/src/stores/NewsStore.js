@@ -27,6 +27,7 @@ export const useNewsStore = defineStore("useNewsStore", {
         n.countOfComments = await commentsService.checkExistComment(n.id);
         n.showComments = false;
         n.isCommentsLoaded = false;
+        n.showFullText = false;
         n.change = false;
       });
     },
