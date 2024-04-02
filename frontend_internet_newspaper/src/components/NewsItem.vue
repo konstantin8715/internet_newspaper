@@ -135,8 +135,7 @@ export default {
       try {
         await this.newsStore.saveLikeForNews(this.post, this.userStore);
       } catch (error) {
-        console.log(error);
-        console.log(
+        alert(
           "Пользователь не авторизован, либо срок действия токенов истек"
         );
       }
@@ -149,7 +148,6 @@ export default {
         this.post.picture.url = pictureUrl;
         await this.newsStore.updateNews(this.post, this.userStore);
       } catch (error) {
-        console.log(error);
         alert("Не удалось обновить новость");
       }
     },
@@ -158,7 +156,6 @@ export default {
       try {
         await this.newsStore.loadCommentsForNews(this.post);
       } catch (error) {
-        console.log(error);
         alert("Не удалось загрузить комментарии");
       }
     },

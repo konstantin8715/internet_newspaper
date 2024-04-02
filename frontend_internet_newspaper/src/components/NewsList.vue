@@ -41,7 +41,6 @@ export default {
         await this.newsStore.createNews(createdNews, this.userStore);
         this.getFreshNews();
       } catch (error) {
-        console.log(error);
         alert("Не удалось создать новость");
       }
     },

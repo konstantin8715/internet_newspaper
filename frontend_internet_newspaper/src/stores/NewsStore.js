@@ -71,7 +71,6 @@ export const useNewsStore = defineStore("useNewsStore", {
           picture: news.picture,
           themes: [],
         };
-        console.log(requestNews);
         await newsService.createNews(requestNews, userStore);
       } catch (error) {
         throw error;

@@ -3,23 +3,15 @@ import { useUserStore } from "../stores/UserStore";
 
 export const userService = {
   async signUp(name, surname, email, password) {
-    try {
-      return await userApi.signUp(name, surname, email, password);
-    } catch (error) {
-      throw error;
-    }
+    return await userApi.signUp(name, surname, email, password);
   },
 
   async signIn(email, password) {
-    try {
-      const response = await userApi.signIn(email, password);
-      const data = response.data;
-      useUserStore().saveUser(data.id, data.name, data.surname, data.roles);
-      localStorage.setItem("accessToken", data.accessToken);
-      localStorage.setItem("refreshToken", data.refreshToken);
-    } catch (error) {
-      throw error;
-    }
+    const response = await userApi.signIn(email, password);
+    const data = response.data;
+    useUserStore().saveUser(data.id, data.name, data.surname, data.roles);
+    localStorage.setItem("accessToken", data.accessToken);
+    localStorage.setItem("refreshToken", data.refreshToken);
   },
 
   async refreshToken(user) {
@@ -27,7 +19,6 @@ export const userService = {
       const response = await userApi.refreshToken();
       const data = response.data;
       localStorage.setItem("accessToken", data.accessToken);
-      console.log('refreshToken');
       return response;
     } catch (error) {
       user.deleteUserFromLocalStorage();
@@ -37,10 +28,6 @@ export const userService = {
   },
 
   async signOut() {
-    try {
-      await userApi.signOut();
-    } catch (error) {
-      throw error;
-    }
+    await userApi.signOut();
   },
 };

@@ -70,14 +70,12 @@ export default {
       try {
         await this.newsStore.loadCommentsForNews(this.post);
       } catch (error) {
-        console.log(error);
         alert("Не удалось загрузить комментарии");
       }
     },
 
     async saveComment() {
       try {
-        console.log(this.comment);
         await this.newsStore.saveCommentForNews(
           this.post,
           this.comment,
@@ -85,8 +83,7 @@ export default {
         );
         this.comment = "";
       } catch (error) {
-        console.log(error);
-        console.log(
+        alert(
           "Пользователь не авторизован, либо срок действия токенов истек"
         );
       }
@@ -108,8 +105,7 @@ export default {
           );
         }
       } catch (error) {
-        console.log(error);
-        console.log("Не удалось удалить комментарий");
+        alert("Не удалось удалить комментарий");
       }
     },
 

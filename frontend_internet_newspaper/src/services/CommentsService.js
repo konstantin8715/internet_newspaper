@@ -3,24 +3,20 @@ import { commentsApi } from "../api/CommentsApi";
 
 export const commentsService = {
   async getCommentsForNews(news) {
-    try {
-      const comments = [];
+    const comments = [];
 
-      for (
-        let i = 0;
-        i < Math.min(news.countOfComments - news.comments.length, 3);
-        i++
-      ) {
-        const commentData = await commentsApi.getCommentsForNews(news.id);
-        const comment = commentData.data[0];
-        comment.datePublishedComment = new Date(comment.datePublishedComment);
-        comments.push(comment);
-      }
-
-      return comments;
-    } catch (error) {
-      throw error;
+    for (
+      let i = 0;
+      i < Math.min(news.countOfComments - news.comments.length, 3);
+      i++
+    ) {
+      const commentData = await commentsApi.getCommentsForNews(news.id);
+      const comment = commentData.data[0];
+      comment.datePublishedComment = new Date(comment.datePublishedComment);
+      comments.push(comment);
     }
+
+    return comments;
   },
 
   async checkExistComment(newsId) {
@@ -33,12 +29,8 @@ export const commentsService = {
     try {
       return await commentsApi.saveComment(newsId, textComment);
     } catch (error) {
-      try {
-        await userService.refreshToken(user);
-        this.saveComment(newsId, textComment, user);
-      } catch (error) {
-        throw error;
-      }
+      await userService.refreshToken(user);
+      this.saveComment(newsId, textComment, user);
     }
   },
 
@@ -46,12 +38,8 @@ export const commentsService = {
     try {
       await commentsApi.userDeleteComment(commentId);
     } catch (error) {
-      try {
-        await userService.refreshToken(user);
-        this.userDeleteComment(commentId, user);
-      } catch (error) {
-        throw error;
-      }
+      await userService.refreshToken(user);
+      this.userDeleteComment(commentId, user);
     }
   },
 
@@ -59,12 +47,8 @@ export const commentsService = {
     try {
       await commentsApi.adminDeleteComment(commentId);
     } catch (error) {
-      try {
-        await userService.refreshToken(admin);
-        this.adminDeleteComment(commentId, admin);
-      } catch (error) {
-        throw error;
-      }
+      await userService.refreshToken(admin);
+      this.adminDeleteComment(commentId, admin);
     }
   },
 };
