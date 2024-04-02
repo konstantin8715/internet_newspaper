@@ -1,53 +1,7 @@
 <template>
   <div class="container">
     <main-header />
-
-    <!-- Изменение новости -->
-    <!-- <v-btn v-if="this.userStore.isAdmin" @click="openDialog(n)"
-        >Изменить новость</v-btn
-      >
-
-      <v-dialog v-model="n.change" width="auto">
-        <v-card max-width="700" prepend-icon="mdi-update" title="Update news">
-          <input v-model="this.updateTitle" />
-          <textarea v-model="this.updateText" cols="100" rows="40"></textarea>
-          <template v-slot:actions>
-            <v-btn class="ms-auto" @click="updateNews(n)"
-              >Подтвердить изменения</v-btn
-            >
-            <v-btn class="ms-auto" @click="n.change = false">Отмена</v-btn>
-          </template>
-        </v-card>
-      </v-dialog> -->
-    <!-- Изменение новости -->
-
-    <!-- <div v-if="this.userStore.isAdmin">
-        <button @click="deleteNews(n)">Удалить новость</button>
-      </div> -->
-
     <news-list />
-
-    <!-- Добавление новости -->
-    <!-- <v-btn v-if="this.userStore.isAdmin" @click="this.createNewsFlag = true"
-        >Добавить новость</v-btn
-      >
-  
-      <v-dialog v-model="this.createNewsFlag" width="auto">
-        <v-card max-width="700" prepend-icon="mdi-update" title="Update news">
-          <input v-model="this.createNewsTitle" />
-          <textarea v-model="this.createNewsText" cols="100" rows="40"></textarea>
-          <input v-model="this.createNewsPictureUrl" placeholder="pictureUrl" />
-          <template v-slot:actions>
-            <v-btn class="ms-auto" @click="createNews()"
-              >Подтвердить изменения</v-btn
-            >
-            <v-btn class="ms-auto" @click="this.createNewsFlag = false"
-              >Отмена</v-btn
-            >
-          </template>
-        </v-card>
-      </v-dialog> -->
-    <!-- Добавление новости -->
   </div>
 </template>
 

@@ -17,7 +17,9 @@ export const useNewsStore = defineStore("useNewsStore", {
 
   actions: {
     async loadNews() {
-      // console.log("newsStore.loadNews()");
+      if (this.hasNews) {
+        this.news = [];
+      }
       const news = await newsService.getFreshNews();
       news.forEach(async (n) => {
         this.news.push(n);
@@ -89,7 +91,7 @@ export const useNewsStore = defineStore("useNewsStore", {
         const newComment = await commentsService.saveComment(
           news.id,
           textComment,
-          userStore
+          userStore,
         );
         newComment.data.datePublishedComment = new Date(
           newComment.data.datePublishedComment

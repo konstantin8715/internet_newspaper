@@ -92,7 +92,7 @@ export default {
         await this.newsStore.saveCommentForNews(
           this.post,
           this.comment,
-          this.userStore
+          this.userStore,
         );
         this.comment = "";
       } catch (error) {

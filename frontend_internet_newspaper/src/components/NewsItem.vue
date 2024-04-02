@@ -150,6 +150,8 @@ export default {
 
 .post-text {
   font-size: $medium-text;
+  word-wrap: break-word;
+  white-space: pre-line;
 }
 
 .post-img {
