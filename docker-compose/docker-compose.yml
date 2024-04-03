@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   backend:
-    image: kostyan87/application.jar:latest
+    image: aleksandrovyur11/internet_newspaper:backend
     container_name: backend
     depends_on:
       - psql-db
