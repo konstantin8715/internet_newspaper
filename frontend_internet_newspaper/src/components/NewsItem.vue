@@ -4,6 +4,7 @@
       <news-change-block
         :action="'Изменить новость'"
         :title="post.newsTitle"
+        :themes="post.themes"
         :text="post.newsText"
         :pictureUrl="post.picture.url"
         @enterDialog="updateNews"
@@ -20,7 +21,10 @@
     </div>
 
     <h1 class="post-title mt-2">{{ post.newsTitle }}</h1>
-    <div class="post-text mt-4">
+    <div class="post-themes">
+      {{ this.postThemesList }}
+    </div>
+    <div class="post-text mt-2">
       <span>
         {{ this.firstHalfOfPostText
         }}<!--
@@ -128,6 +132,10 @@ export default {
       const len = this.post.newsText.length;
       return this.post.newsText.slice(len / 2);
     },
+
+    postThemesList() {
+      return this.post.themes.map((t) => '#' + t.name).join(" ");
+    },
   },
 
   methods: {
@@ -135,15 +143,14 @@ export default {
       try {
         await this.newsStore.saveLikeForNews(this.post, this.userStore);
       } catch (error) {
-        alert(
-          "Пользователь не авторизован, либо срок действия токенов истек"
-        );
+        alert("Пользователь не авторизован, либо срок действия токенов истек");
       }
     },
 
-    async updateNews(title, text, pictureUrl) {
+    async updateNews(title, themes, text, pictureUrl) {
       try {
         this.post.newsTitle = title;
+        this.post.themes = themes;
         this.post.newsText = text;
         this.post.picture.url = pictureUrl;
         await this.newsStore.updateNews(this.post, this.userStore);
@@ -207,6 +214,10 @@ export default {
 }
 
 .post-text-button {
+  color: $light-primary;
+}
+
+.post-themes {
   color: $light-primary;
 }
 </style>

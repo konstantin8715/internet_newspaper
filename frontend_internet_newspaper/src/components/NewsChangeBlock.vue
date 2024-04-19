@@ -1,6 +1,12 @@
 <template>
   <div>
-    <app-button v-if="this.userStore.isAdmin" @click="this.open = true">
+    <app-button
+      v-if="this.userStore.isAdmin"
+      @click="
+        this.open = true;
+        this.localThemes = [...this.themes];
+      "
+    >
       {{ action }}
     </app-button>
 
@@ -16,6 +22,38 @@
           :value="this.localTitle"
           @enterField="this.localTitle = $event"
         />
+
+        <form-field
+          class="mt-2"
+          :title="'Темы:'"
+          :type="'text'"
+          :placeholderText="'Введите тему'"
+          :validator="this.textValidator"
+          :warningText="'Тема должна иметь длину минимум 2 символа'"
+          @updateField="this.isValidNewTheme = $event"
+          :value="this.newThemeName"
+          @enterField="this.newThemeName = $event"
+        />
+
+        <app-button
+          class="w-25 mt-2"
+          :disabled="!this.isValidNewTheme"
+          @click="addTheme"
+        >
+          Добавить тему
+        </app-button>
+
+        <div class="mt-2">
+          <v-chip
+            v-for="t in this.localThemes"
+            :key="t.name"
+            class="ma-2"
+            closable
+            @click:close="deleteTheme(t)"
+          >
+            {{ "#" + t.name }}
+          </v-chip>
+        </div>
 
         <form-field
           class="mt-2"
@@ -41,10 +79,7 @@
           @enterField="this.localPictureUrl = $event"
         />
 
-        <img
-          class="d-block mt-4 mx-auto w-50 h-50"
-          :src="localPictureUrl"
-        />
+        <img class="d-block mt-4 mx-auto w-50 h-50" :src="localPictureUrl" />
 
         <div class="mt-4 d-flex justify-end">
           <news-confirm-button
@@ -53,11 +88,17 @@
             :isValidUrl="this.isValidUrl"
             :text="action"
             @confirm="
-              $emit('enterDialog', localTitle, localText, localPictureUrl);
+              $emit(
+                'enterDialog',
+                localTitle,
+                localThemes,
+                localText,
+                localPictureUrl
+              );
               this.open = false;
             "
           />
-  
+
           <app-button class="ml-2" @click="this.open = false">
             Отмена
           </app-button>
@@ -91,6 +132,12 @@ export default {
       default: "",
     },
 
+    themes: {
+      type: Array,
+      requiered: true,
+      default: [],
+    },
+
     text: {
       type: String,
       requiered: true,
@@ -115,6 +162,8 @@ export default {
       localTitle: this.title,
       localText: this.text,
       localPictureUrl: this.pictureUrl,
+      localThemes: [...this.themes],
+      newThemeName: "",
       userStore: useUserStore(),
       open: false,
       textValidator: validateText,
@@ -122,7 +171,24 @@ export default {
       isValidTitle: false,
       isValidText: false,
       isValidUrl: false,
+      isValidNewTheme: false,
     };
+  },
+
+  methods: {
+    deleteTheme(theme) {
+      this.localThemes = this.localThemes.filter((t) => t.name != theme.name);
+    },
+
+    addTheme() {
+      console.log(this.localThemes.find((t) => t.name == this.newThemeName));
+      if (this.localThemes.find((t) => t.name == this.newThemeName)) {
+        alert("Такая тема уже есть");
+      } else {
+        this.localThemes.push({ name: this.newThemeName });
+      }
+      this.newThemeName = "";
+    },
   },
 
   emits: ["enterDialog"],
