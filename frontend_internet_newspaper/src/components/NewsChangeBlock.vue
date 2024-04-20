@@ -181,7 +181,6 @@ export default {
     },
 
     addTheme() {
-      console.log(this.localThemes.find((t) => t.name == this.newThemeName));
       if (this.localThemes.find((t) => t.name == this.newThemeName)) {
         alert("Такая тема уже есть");
       } else {

@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 import { newsService } from "../services/NewsService";
 import { commentsService } from "../services/CommentsService";
 import { likesService } from "../services/LikesService";
+import { useUserStore } from "./UserStore";
 
 export const useNewsStore = defineStore("useNewsStore", {
   state: () => ({
@@ -12,7 +13,7 @@ export const useNewsStore = defineStore("useNewsStore", {
   getters: {
     hasNews() {
       return this.news.length > 0;
-    }
+    },
   },
 
   actions: {
@@ -20,7 +21,15 @@ export const useNewsStore = defineStore("useNewsStore", {
       if (this.hasNews) {
         this.news = [];
       }
-      const news = await newsService.getFreshNews();
+      let news;
+      if (useUserStore().isUser) {
+        news = await newsService.getNewsByUserThemes(
+          useUserStore().favoritesThemes,
+          useUserStore().forbiddenThemes
+        );
+      } else {
+        news = await newsService.getFreshNews();
+      }
       news.forEach(async (n) => {
         this.news.push(n);
         n.comments = [];
@@ -79,7 +88,7 @@ export const useNewsStore = defineStore("useNewsStore", {
     async deleteNews(newsId, userStore) {
       try {
         await newsService.deleteNews(newsId, userStore);
-        this.news = this.news.filter(n => n.id != newsId);
+        this.news = this.news.filter((n) => n.id != newsId);
       } catch (error) {
         throw error;
       }
@@ -90,7 +99,7 @@ export const useNewsStore = defineStore("useNewsStore", {
         const newComment = await commentsService.saveComment(
           news.id,
           textComment,
-          userStore,
+          userStore
         );
         newComment.data.datePublishedComment = new Date(
           newComment.data.datePublishedComment

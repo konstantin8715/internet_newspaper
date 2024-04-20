@@ -2,10 +2,11 @@
   <div class="header">
     <div class="content-container d-flex justify-space-between align-center">
       <span class="header-logo text-uppercase">Новости</span>
-      <div v-if="this.userStore.isUser">
+      <div v-if="this.userStore.isUser" class="d-flex">
         <span class="header-profile mr-6"
           >{{ this.userStore.name }} {{ this.userStore.surname }}
         </span>
+        <theme-change-block class="mr-6" />
         <app-button @click="signOut"> Выйти </app-button>
       </div>
       <div v-else>
@@ -21,11 +22,12 @@
 <script>
 import { useUserStore } from "../stores/UserStore";
 import AppButton from "./UI/AppButton.vue";
+import ThemeChangeBlock from './ThemeChangeBlock.vue';
 
 export default {
   name: "main-header",
 
-  components: { AppButton },
+  components: { AppButton, ThemeChangeBlock },
 
   data() {
     return {

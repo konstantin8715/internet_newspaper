@@ -7,11 +7,15 @@ export const useUserStore = defineStore("userStore", {
     name: "",
     surname: "",
     roles: [],
+    favoritesThemes: [],
+    forbiddenThemes: [],
   }),
 
   getters: {
     isUser() {
-      return this.roles.includes("ROLE_USER") || this.roles.includes("ROLE_ADMIN");
+      return (
+        this.roles.includes("ROLE_USER") || this.roles.includes("ROLE_ADMIN")
+      );
     },
 
     isAdmin() {
@@ -33,6 +37,13 @@ export const useUserStore = defineStore("userStore", {
       this.name = localStorage.getItem("userName");
       this.surname = localStorage.getItem("userSurname");
       this.roles = JSON.parse(localStorage.getItem("userRoles"));
+      this.favoritesThemes = JSON.parse(
+        localStorage.getItem("favoritesThemes")
+      );
+      this.forbiddenThemes = JSON.parse(
+        localStorage.getItem("forbiddenThemes")
+      );
+      // console.log(this.favoritesThemes);
     },
 
     saveUserToLocalStorage(id, name, surname, roles) {
@@ -40,6 +51,50 @@ export const useUserStore = defineStore("userStore", {
       localStorage.setItem("userName", name);
       localStorage.setItem("userSurname", surname);
       localStorage.setItem("userRoles", JSON.stringify(roles));
+      localStorage.setItem(
+        "favoritesThemes",
+        JSON.stringify(this.favoritesThemes)
+      );
+      localStorage.setItem(
+        "forbiddenThemes",
+        JSON.stringify(this.forbiddenThemes)
+      );
+    },
+
+    addFavoriteTheme(theme) {
+      this.favoritesThemes.push(theme);
+      localStorage.setItem(
+        "favoritesThemes",
+        JSON.stringify(this.favoritesThemes)
+      );
+    },
+
+    addForbiddenTheme(theme) {
+      this.forbiddenThemes.push(theme);
+      localStorage.setItem(
+        "forbiddenThemes",
+        JSON.stringify(this.forbiddenThemes)
+      );
+    },
+
+    deleteFavoriteTheme(theme) {
+      this.favoritesThemes = this.favoritesThemes.filter(
+        (t) => t.name != theme.name
+      );
+      localStorage.setItem(
+        "favoritesThemes",
+        JSON.stringify(this.favoritesThemes)
+      );
+    },
+
+    deleteForbiddenTheme(theme) {
+      this.forbiddenThemes = this.forbiddenThemes.filter(
+        (t) => t.name != theme.name
+      );
+      localStorage.setItem(
+        "forbiddenThemes",
+        JSON.stringify(this.forbiddenThemes)
+      );
     },
 
     deleteUserFromLocalStorage() {
@@ -47,6 +102,8 @@ export const useUserStore = defineStore("userStore", {
       localStorage.removeItem("userName");
       localStorage.removeItem("userSurname");
       localStorage.removeItem("userRoles");
+      localStorage.removeItem("favoritesThemes");
+      localStorage.removeItem("forbiddenThemes");
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
     },

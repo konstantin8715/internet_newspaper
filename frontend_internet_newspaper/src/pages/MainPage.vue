@@ -27,6 +27,7 @@ export default {
       try {
         await this.newsStore.loadNews();
       } catch (error) {
+        console.log(error);
         alert("Ошибка при загрузке новостей");
       }
     },

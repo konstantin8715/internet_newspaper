@@ -8,6 +8,15 @@ export const newsService = {
     return data;
   },
 
+  async getNewsByUserThemes(favoritesThemes, forbiddenThemes) {
+    const response = await newsApi.getNewsByUserThemes(
+      favoritesThemes,
+      forbiddenThemes
+    );
+    const data = response.data;
+    return data;
+  },
+
   async updateNews(news, user) {
     try {
       await newsApi.updateNews(news);

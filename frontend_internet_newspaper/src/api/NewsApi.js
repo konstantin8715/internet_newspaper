@@ -10,6 +10,17 @@ export const newsApi = {
     });
   },
 
+  getNewsByUserThemes(favoritesT, forbiddenT) {
+    return axios({
+      url: `${this.URL}/news/user-themes`,
+      method: "post",
+      data: {
+        favoritesThemes: favoritesT,
+        forbiddenThemes: forbiddenT,
+      },
+    });
+  },
+
   updateNews(news) {
     return axios({
       url: `${this.URL}/news/${news.id}`,
