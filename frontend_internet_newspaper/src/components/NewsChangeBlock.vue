@@ -16,8 +16,8 @@
           :title="'Заголовок:'"
           :type="'text'"
           :placeholderText="'Введите загловок'"
-          :validator="this.textValidator"
-          :warningText="'Заголовок должно иметь длину минимум 2 символа'"
+          :validator="this.titleValidator"
+          :warningText="'Заголовок должно иметь длину минимум 2 символа и максимум 255 символов'"
           @updateField="this.isValidTitle = $event"
           :value="this.localTitle"
           @enterField="this.localTitle = $event"
@@ -113,6 +113,7 @@ import { useUserStore } from "../stores/UserStore";
 import FormField from "./FormField.vue";
 import NewsConfirmButton from "./NewsConfirmButton.vue";
 import { validateText } from "../helpers/TextValidator";
+import { validateTitle } from "../helpers/TitleValidator";
 import { validateUrl } from "../helpers/UrlValidator";
 
 export default {
@@ -152,7 +153,7 @@ export default {
   },
 
   created() {
-    this.isValidTitle = this.textValidator(this.localTitle);
+    this.isValidTitle = this.titleValidator(this.localTitle);
     this.isValidText = this.textValidator(this.localText);
     this.isValidUrl = this.textValidator(this.localPictureUrl);
   },
@@ -167,6 +168,7 @@ export default {
       userStore: useUserStore(),
       open: false,
       textValidator: validateText,
+      titleValidator: validateTitle,
       urlValidator: validateUrl,
       isValidTitle: false,
       isValidText: false,
@@ -208,3 +210,4 @@ export default {
   border-radius: 5px;
 }
 </style>
+../helpers/TitleValidator
