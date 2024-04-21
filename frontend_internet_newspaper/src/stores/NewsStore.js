@@ -22,7 +22,7 @@ export const useNewsStore = defineStore("useNewsStore", {
         this.news = [];
       }
       let news;
-      if (useUserStore().isUser) {
+      if (useUserStore().isUser && !useUserStore().favoritesThemes.length == 0) {
         news = await newsService.getNewsByUserThemes(
           useUserStore().favoritesThemes,
           useUserStore().forbiddenThemes

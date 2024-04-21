@@ -69,7 +69,7 @@
         </div>
 
         <div class="mt-4 d-flex justify-end">
-          <app-button class="ml-2" @click="this.open = false">
+          <app-button class="ml-2" @click="this.open = false; loadNews();">
             Закрыть
           </app-button>
         </div>
@@ -80,6 +80,7 @@
 
 <script>
 import { useUserStore } from "../stores/UserStore";
+import { useNewsStore } from "../stores/NewsStore";
 import FormField from "./FormField.vue";
 import { validateText } from "../helpers/TextValidator";
 
@@ -95,6 +96,7 @@ export default {
       isValidFavoriteTheme: false,
       isValidForbiddenTheme: false,
       userStore: useUserStore(),
+      newsStore: useNewsStore(),
       open: false,
       textValidator: validateText,
     };
@@ -110,7 +112,6 @@ export default {
     },
 
     addFavoriteTheme() {
-      // console.log(this.userStore.favoritesThemes);
       if (
         this.userStore.favoritesThemes.find((t) => t.name == this.favoriteTheme)
       ) {
@@ -130,6 +131,14 @@ export default {
         this.userStore.addForbiddenTheme({ name: this.forbiddenTheme });
       }
       this.forbiddenTheme = "";
+    },
+
+    async loadNews() {
+      try {
+        await this.newsStore.loadNews();
+      } catch (error) {
+        alert("Ошибка при загрузке новостей");
+      }
     },
   },
 

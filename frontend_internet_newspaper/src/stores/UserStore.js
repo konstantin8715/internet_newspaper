@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { userService } from "../services/UserService";
+import { useNewsStore } from './NewsStore';
 
 export const useUserStore = defineStore("userStore", {
   state: () => ({
@@ -43,7 +44,6 @@ export const useUserStore = defineStore("userStore", {
       this.forbiddenThemes = JSON.parse(
         localStorage.getItem("forbiddenThemes")
       );
-      // console.log(this.favoritesThemes);
     },
 
     saveUserToLocalStorage(id, name, surname, roles) {
@@ -116,6 +116,11 @@ export const useUserStore = defineStore("userStore", {
       } finally {
         this.deleteUserFromLocalStorage();
         this.$reset();
+        try {
+          await useNewsStore().loadNews();
+        } catch (error) {
+          alert("Ошибка при загрузке новостей");
+        }
       }
     },
   },
