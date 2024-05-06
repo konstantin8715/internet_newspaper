@@ -37,6 +37,11 @@ export default {
       requiered: true,
     },
 
+    isPasswordsMatched: {
+      type: Boolean,
+      requiered: true,
+    },
+
     text: {
       type: String,
       requiered: true,
@@ -62,7 +67,8 @@ export default {
           !this.isValidEmail ||
           !this.isValidPassword ||
           !this.isValidName ||
-          !this.isValidSurname
+          !this.isValidSurname ||
+          !this.isPasswordsMatched
         );
       }
     },

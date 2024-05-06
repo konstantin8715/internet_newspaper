@@ -25,6 +25,7 @@
       <form-confirm-button
         :isValidName="true"
         :isValidSurname="true"
+        :isPasswordsMatched="true"
         :isValidEmail="this.isValidEmail"
         :isValidPassword="this.isValidPassword"
         :text="'Войти'"

@@ -44,11 +44,21 @@
         @enterField="this.password = $event"
       />
 
+      <form-field
+        class="mt-2"
+        :title="'Подтвердите пароль:'"
+        :type="'password'"
+        :placeholderText="'Введите пароль'"
+        :warningText="''"
+        @enterField="this.confirmPassword = $event"
+      />
+
       <form-confirm-button
         :isValidName="this.isValidName"
         :isValidSurname="this.isValidSurname"
         :isValidEmail="this.isValidEmail"
         :isValidPassword="this.isValidPassword"
+        :isPasswordsMatched="this.isPasswordsMatched"
         :text="'Зарегистрироваться'"
         :warningText="'Пользователь с таким email уже существует'"
         :showErrorMessage="this.showErrorMessage"
@@ -86,6 +96,7 @@ export default {
       surname: "",
       email: "",
       password: "",
+      confirmPassword: "",
       textValidator: validateText,
       emailValidator: validateEmail,
       passwordValidator: validatePassword,
@@ -95,6 +106,12 @@ export default {
       isValidPassword: false,
       showErrorMessage: false,
     };
+  },
+
+  computed: {
+    isPasswordsMatched() {
+      return this.password == this.confirmPassword;
+    }
   },
 
   methods: {
