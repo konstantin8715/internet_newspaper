@@ -77,7 +77,7 @@ export const useNewsStore = defineStore("useNewsStore", {
           datePublishedNews: new Date().toISOString(),
           likes: [],
           picture: news.picture,
-          themes: [],
+          themes: news.themes,
         };
         await newsService.createNews(requestNews, userStore);
       } catch (error) {

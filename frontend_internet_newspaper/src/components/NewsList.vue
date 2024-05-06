@@ -29,10 +29,11 @@ export default {
   },
 
   methods: {
-    async createNews(title, text, pictureUrl) {
+    async createNews(title, themes, text, pictureUrl) {
       try {
         const createdNews = {
           newsTitle: title,
+          themes: themes,
           newsText: text,
           picture: {
             url: pictureUrl,

@@ -2,6 +2,7 @@
   <div class="content-container">
     <div class="admin-buttons d-flex justify-end">
       <news-change-block
+        class="mr-2"
         :action="'Изменить новость'"
         :title="post.newsTitle"
         :themes="post.themes"
@@ -10,14 +11,10 @@
         @enterDialog="updateNews"
       />
 
-      <app-button
-        v-if="this.userStore.isAdmin"
-        @click="deleteNews"
-        class="ml-2"
-        color="red-darken-4"
-      >
-        Удалить новость
-      </app-button>
+      <news-delete-block
+        :action="'Удалить новость'"
+        @enterDialog="deleteNews"
+      />
     </div>
 
     <h1 class="post-title mt-2">{{ post.newsTitle }}</h1>
@@ -94,11 +91,12 @@ import { useUserStore } from "../stores/UserStore";
 import { useNewsStore } from "../stores/NewsStore";
 import CommentsList from "./CommentsList.vue";
 import NewsChangeBlock from "./NewsChangeBlock.vue";
+import NewsDeleteBlock from "./NewsDeleteBlock.vue";
 import { formatDate } from "../helpers/DataFormatter.js";
 
 export default {
   name: "news-item",
-  components: { CommentsList, NewsChangeBlock },
+  components: { CommentsList, NewsChangeBlock, NewsDeleteBlock },
 
   props: {
     post: {
@@ -134,7 +132,7 @@ export default {
     },
 
     postThemesList() {
-      return this.post.themes.map((t) => '#' + t.name).join(" ");
+      return this.post.themes.map((t) => "#" + t.name).join(" ");
     },
   },
 
