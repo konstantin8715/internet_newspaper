@@ -1,5 +1,10 @@
 <template>
   <div сlass="d-flex flex-column" v-if="post.showComments">
+    
+    <div v-for="comment in sortedComments(post)" :key="comment.id">
+      <comment-item :comment="comment" @deleteComment="this.deleteComment" />
+    </div>
+
     <span
       class="cursor-pointer text-decoration-underline"
       v-if="post.comments.length < post.countOfComments"
@@ -7,10 +12,6 @@
     >
       Показать предыдущие комментарии
     </span>
-
-    <div v-for="comment in sortedComments(post)" :key="comment.id">
-      <comment-item :comment="comment" @deleteComment="this.deleteComment" />
-    </div>
 
     <app-textarea
       class="mt-6 h-10"
@@ -111,7 +112,7 @@ export default {
 
     sortedComments() {
       return this.post.comments.sort(
-        (c1, c2) => c1.datePublishedComment - c2.datePublishedComment
+        (c1, c2) => c2.datePublishedComment - c1.datePublishedComment
       );
     },
   },

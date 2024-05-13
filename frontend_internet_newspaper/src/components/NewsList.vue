@@ -1,13 +1,13 @@
 <template>
   <template v-if="this.newsStore.hasNews">
-    <div class="post" v-for="post in this.newsStore.news" :key="post.id">
-      <news-item :post="post" />
-    </div>
     <news-change-block
-      class="d-flex justify-center mt-8 pb-8"
+      class="d-flex justify-center mt-5"
       :action="'Добавить новость'"
       @enterDialog="createNews"
     />
+    <div class="post" v-for="post in this.newsStore.news" :key="post.id">
+      <news-item :post="post" />
+    </div>
   </template>
   <div v-else class="d-flex justify-center align-center mt-16">
     <span class="no-news-banner">Нет актуальных новостей</span>

@@ -118,7 +118,7 @@ export default {
     },
 
     formattedDate() {
-      return formatDate(new Date(this.post.datePublishedNews));
+      return formatDate(this.post.datePublishedNews);
     },
 
     firstHalfOfPostText() {
@@ -151,6 +151,7 @@ export default {
         this.post.themes = themes;
         this.post.newsText = text;
         this.post.picture.url = pictureUrl;
+        this.post.datePublishedNews = new Date();
         await this.newsStore.updateNews(this.post, this.userStore);
       } catch (error) {
         alert("Не удалось обновить новость");

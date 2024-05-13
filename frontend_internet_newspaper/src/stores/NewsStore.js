@@ -74,7 +74,6 @@ export const useNewsStore = defineStore("useNewsStore", {
         const requestNews = {
           newsTitle: news.newsTitle,
           newsText: news.newsText,
-          datePublishedNews: new Date().toISOString(),
           likes: [],
           picture: news.picture,
           themes: news.themes,
