@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { userService } from "../services/UserService";
-import { useNewsStore } from './NewsStore';
+import { useNewsStore } from "./NewsStore";
 
 export const useUserStore = defineStore("userStore", {
   state: () => ({
@@ -38,12 +38,14 @@ export const useUserStore = defineStore("userStore", {
       this.name = localStorage.getItem("userName");
       this.surname = localStorage.getItem("userSurname");
       this.roles = JSON.parse(localStorage.getItem("userRoles"));
-      this.favoritesThemes = JSON.parse(
-        localStorage.getItem("favoritesThemes")
-      );
-      this.forbiddenThemes = JSON.parse(
-        localStorage.getItem("forbiddenThemes")
-      );
+      const favoritesThemes = JSON.parse(localStorage.getItem(this.id + "fav"));
+      favoritesThemes == null
+        ? (this.favoritesThemes = [])
+        : (this.favoritesThemes = favoritesThemes);
+      const forbiddenThemes = JSON.parse(localStorage.getItem(this.id + "forb"));
+      forbiddenThemes == null
+        ? (this.forbiddenThemes = [])
+        : (this.forbiddenThemes = forbiddenThemes);
     },
 
     saveUserToLocalStorage(id, name, surname, roles) {
@@ -51,20 +53,20 @@ export const useUserStore = defineStore("userStore", {
       localStorage.setItem("userName", name);
       localStorage.setItem("userSurname", surname);
       localStorage.setItem("userRoles", JSON.stringify(roles));
-      localStorage.setItem(
-        "favoritesThemes",
-        JSON.stringify(this.favoritesThemes)
-      );
-      localStorage.setItem(
-        "forbiddenThemes",
-        JSON.stringify(this.forbiddenThemes)
-      );
+      // localStorage.setItem(
+      //   "favoritesThemes",
+      //   JSON.stringify(this.favoritesThemes)
+      // );
+      // localStorage.setItem(
+      //   "forbiddenThemes",
+      //   JSON.stringify(this.forbiddenThemes)
+      // );
     },
 
     addFavoriteTheme(theme) {
       this.favoritesThemes.push(theme);
       localStorage.setItem(
-        "favoritesThemes",
+        this.id + "fav",
         JSON.stringify(this.favoritesThemes)
       );
     },
@@ -72,7 +74,7 @@ export const useUserStore = defineStore("userStore", {
     addForbiddenTheme(theme) {
       this.forbiddenThemes.push(theme);
       localStorage.setItem(
-        "forbiddenThemes",
+        this.id + "forb",
         JSON.stringify(this.forbiddenThemes)
       );
     },
@@ -82,7 +84,7 @@ export const useUserStore = defineStore("userStore", {
         (t) => t.name != theme.name
       );
       localStorage.setItem(
-        "favoritesThemes",
+        this.id + "fav",
         JSON.stringify(this.favoritesThemes)
       );
     },
@@ -92,7 +94,7 @@ export const useUserStore = defineStore("userStore", {
         (t) => t.name != theme.name
       );
       localStorage.setItem(
-        "forbiddenThemes",
+        this.id + "forb",
         JSON.stringify(this.forbiddenThemes)
       );
     },
@@ -102,8 +104,8 @@ export const useUserStore = defineStore("userStore", {
       localStorage.removeItem("userName");
       localStorage.removeItem("userSurname");
       localStorage.removeItem("userRoles");
-      localStorage.removeItem("favoritesThemes");
-      localStorage.removeItem("forbiddenThemes");
+      // localStorage.removeItem("favoritesThemes");
+      // localStorage.removeItem("forbiddenThemes");
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
     },

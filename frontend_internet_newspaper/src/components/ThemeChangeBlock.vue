@@ -112,6 +112,7 @@ export default {
     },
 
     addFavoriteTheme() {
+      console.log(this.userStore.favoritesThemes);
       if (
         this.userStore.favoritesThemes.find((t) => t.name == this.favoriteTheme)
       ) {

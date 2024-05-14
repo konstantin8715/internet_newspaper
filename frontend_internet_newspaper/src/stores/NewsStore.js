@@ -21,15 +21,7 @@ export const useNewsStore = defineStore("useNewsStore", {
       if (this.hasNews) {
         this.news = [];
       }
-      let news;
-      if (useUserStore().isUser && !useUserStore().favoritesThemes.length == 0) {
-        news = await newsService.getNewsByUserThemes(
-          useUserStore().favoritesThemes,
-          useUserStore().forbiddenThemes
-        );
-      } else {
-        news = await newsService.getFreshNews();
-      }
+      const news = await newsService.getFreshNews();
       news.forEach(async (n) => {
         this.news.push(n);
         n.comments = [];
