@@ -5,7 +5,11 @@
       :action="'Добавить новость'"
       @enterDialog="createNews"
     />
-    <div class="post" v-for="post in this.newsStore.news" :key="post.id">
+    <div
+      class="post"
+      v-for="post in this.filterNewsByFavoriteForbiddenThemes"
+      :key="post.id"
+    >
       <news-item :post="post" />
     </div>
   </template>
@@ -18,6 +22,7 @@
 import NewsItem from "./NewsItem.vue";
 import { useNewsStore } from "../stores/NewsStore";
 import NewsChangeBlock from "./NewsChangeBlock.vue";
+import { useUserStore } from "../stores/UserStore";
 
 export default {
   name: "news-list",
@@ -25,7 +30,33 @@ export default {
   data() {
     return {
       newsStore: useNewsStore(),
+      userStore: useUserStore(),
     };
+  },
+
+  computed: {
+    filterNewsByFavoriteForbiddenThemes() {
+      let news = this.newsStore.news;
+      const forbiddenThemes = this.userStore.forbiddenThemes.map((n) => n.name);
+      const favoriteThemes = this.userStore.favoritesThemes.map((n) => n.name);
+      news = news.filter(
+        (n) => !n.themes.some((t) => forbiddenThemes.includes(t.name))
+      );
+      return news.sort(
+        (n1, n2) =>
+          n1.themes.reduce((count, t) => {
+            console.log(favoriteThemes);
+            if (favoriteThemes.includes(t)) {
+              count++;
+            }
+          }) -
+          n2.themes.reduce((count, t) => {
+            if (favoriteThemes.includes(t)) {
+              count++;
+            }
+          })
+      );
+    },
   },
 
   methods: {

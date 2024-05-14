@@ -69,7 +69,13 @@
         </div>
 
         <div class="mt-4 d-flex justify-end">
-          <app-button class="ml-2" @click="this.open = false; loadNews();">
+          <app-button
+            class="ml-2"
+            @click="
+              this.open = false;
+              loadNews();
+            "
+          >
             Закрыть
           </app-button>
         </div>
@@ -112,9 +118,13 @@ export default {
     },
 
     addFavoriteTheme() {
-      console.log(this.userStore.favoritesThemes);
       if (
-        this.userStore.favoritesThemes.find((t) => t.name == this.favoriteTheme)
+        this.userStore.favoritesThemes.find(
+          (t) => t.name == this.favoriteTheme
+        ) ||
+        this.userStore.forbiddenThemes.find(
+          (t) => t.name == this.favoriteTheme
+        )
       ) {
         alert("Такая тема уже есть");
       } else {
@@ -125,7 +135,12 @@ export default {
 
     addForbiddenTheme() {
       if (
-        this.userStore.forbiddenThemes.find((t) => t.name == this.forbiddenTheme)
+        this.userStore.favoritesThemes.find(
+          (t) => t.name == this.forbiddenTheme
+        ) ||
+        this.userStore.forbiddenThemes.find(
+          (t) => t.name == this.forbiddenTheme
+        )
       ) {
         alert("Такая тема уже есть");
       } else {
