@@ -131,6 +131,7 @@ export default {
         this.userStore.addFavoriteTheme({ name: this.favoriteTheme });
       }
       this.favoriteTheme = "";
+      this.isValidFavoriteTheme = false;
     },
 
     addForbiddenTheme() {
@@ -147,6 +148,7 @@ export default {
         this.userStore.addForbiddenTheme({ name: this.forbiddenTheme });
       }
       this.forbiddenTheme = "";
+      this.isValidForbiddenTheme = false;
     },
 
     async loadNews() {
