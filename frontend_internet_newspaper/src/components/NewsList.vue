@@ -44,17 +44,18 @@ export default {
       );
       return news.sort(
         (n1, n2) =>
-          n1.themes.reduce((count, t) => {
-            console.log(favoriteThemes);
-            if (favoriteThemes.includes(t)) {
-              count++;
-            }
-          }) -
           n2.themes.reduce((count, t) => {
-            if (favoriteThemes.includes(t)) {
+            if (favoriteThemes.includes(t.name)) {
               count++;
             }
-          })
+            return count;
+          }, 0) -
+          n1.themes.reduce((count, t) => {
+            if (favoriteThemes.includes(t.name)) {
+              count++;
+            }
+            return count;
+          }, 0)
       );
     },
   },
